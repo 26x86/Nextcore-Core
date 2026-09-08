@@ -17,3 +17,7 @@ jobs:
       - run: cargo check --no-default-features --lib --target x86_64-unknown-uefi
       - name: Firmware-compatible core
         run: cargo check --no-default-features
+      - name: Owned guest memory without std and scoped-loan lifetime rejection
+        run: |
+          cargo test --no-default-features --test guest_memory
+          cargo test --no-default-features --doc

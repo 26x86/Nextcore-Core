@@ -139,6 +139,43 @@ fn actual_copy_zero_holes_and_shared_views_match_independent_layout() {
 }
 
 #[test]
+fn verified_immutable_staging_copies_into_an_owned_guest_reservation() {
+    use nextcore_core::guest_memory::{GuestMemory, Purpose};
+    let source = fixture();
+    let source_before = source.clone();
+    let staged = KcStagingPlan::new(&source).unwrap().stage().unwrap();
+    let staged_before = staged.bytes().to_vec();
+    let mut backing = vec![0xa5; staged.bytes().len() + 0x2000];
+    {
+        let mut ledger = GuestMemory::from_borrowed(0x9000_0000, &mut backing).unwrap();
+        let destination = ledger
+            .reserve_at(
+                0x9000_1000,
+                staged.bytes().len() as u64,
+                0x1000,
+                Purpose::KernelImage,
+            )
+            .unwrap();
+        ledger.copy_into(destination, 0, staged.bytes()).unwrap();
+        assert_eq!(ledger.read(destination).unwrap(), staged_before);
+        staged
+            .plan()
+            .verify(ledger.read(destination).unwrap())
+            .unwrap();
+    }
+    assert!(backing[..0x1000].iter().all(|&byte| byte == 0xa5));
+    assert_eq!(
+        &backing[0x1000..0x1000 + staged_before.len()],
+        staged_before
+    );
+    assert!(backing[0x1000 + staged_before.len()..]
+        .iter()
+        .all(|&byte| byte == 0xa5));
+    assert_eq!(source, source_before);
+    assert_eq!(staged.bytes(), staged_before);
+}
+
+#[test]
 fn header_minimum_entry_and_original_segment_indices_stay_distinct() {
     let source = fixture();
     let plan = KcStagingPlan::new(&source).unwrap();
