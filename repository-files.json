@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 318,
-      "sha256": "4bb046649716bc97130177637500bb472a7c6ee3c1878b05b8ced5dbc1ac66b8"
+      "bytes": 472,
+      "sha256": "d040b6f37475c77b6c851cf7d4b10e203d0841d109d6bf55710509139d1cf3f3"
     },
     {
       "path": ".gitignore",
@@ -28,8 +28,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 468,
-      "sha256": "ac6f52aa40cc7ab4c33b5ac8587fbce1237bcd97ab77ce894bc558fbf31c4665"
+      "bytes": 622,
+      "sha256": "cbfa9ffee576bb9bdb0bae87381b3d79c7f6cf382286fd270fbe834d8cf0d0ba"
     },
     {
       "path": "examples/audit_kc.rs",
@@ -55,6 +55,11 @@
       "path": "src/acpi.rs",
       "bytes": 7863,
       "sha256": "1f8b0e7ce514dcbe11caa4da4e464cd35f907015353bdb75faf47bc0464ab063"
+    },
+    {
+      "path": "src/apfs_jumpstart.rs",
+      "bytes": 11966,
+      "sha256": "43219b559cc84deba19d8d9ce9a9a6725017cef274e07fa1a5a6bc8eb63b9649"
     },
     {
       "path": "src/boot_config.rs",
@@ -118,8 +123,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 683,
-      "sha256": "1b085a67a687f746f841c47557ece6588ff86a6f3274b64abce0a79d47bd0609"
+      "bytes": 707,
+      "sha256": "2ea37785af02f226b4bd86ecb0975759cc79c777fd16d4fcf61bfc0b9825c9cc"
     },
     {
       "path": "src/mach_o.rs",
@@ -145,6 +150,11 @@
       "path": "tests/acpi_parse.rs",
       "bytes": 4952,
       "sha256": "f159719e5e14b11dd4241d2bc4dcf73bfc66126a68059c30b3b213673db868ce"
+    },
+    {
+      "path": "tests/apfs_jumpstart.rs",
+      "bytes": 16134,
+      "sha256": "95e06552c59eb8d53da98283a4384f2eb876dc3334c63b0a634d8351266b0bac"
     },
     {
       "path": "tests/arm64_kernel_collection.rs",
