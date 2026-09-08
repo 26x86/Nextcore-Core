@@ -7,8 +7,12 @@
   "crate": "nextcore-core",
   "description": "core boot configuration and public format codecs",
   "source_path": "nextcore/crates/nextcore-core",
-  "source_commit": "3acb61b5c60e3519debb5a65cf47629c387e12cf",
+  "source_commit": "dcc90013109eac694ccbf997b1e44a7018480f78",
   "depends_on": [],
   "initial_tag": "26x86-Nextcore-Core-v0.1.0",
-  "generated_utc": "2026-09-07T12:43:16.963815+00:00"
+  "generated_utc": "2026-09-08T06:40:08.267939+00:00",
+  "release_tag": "26x86-Nextcore-Core-v0.1.1",
+  "previous_head": "4b8b3801b5bcd2e7ed519cc64feada7d76aa2082",
+  "dependency_tags": {},
+  "export_method": "immutable git objects applied to existing main; manifest dependency rewrite only"
 }
