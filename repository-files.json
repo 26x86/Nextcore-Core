@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 765,
-      "sha256": "b6680a22af1d8b26aebd9dd5f4d0dbdeb5c812fe892d14ab6bb26f495f694309"
+      "bytes": 1021,
+      "sha256": "74891ae58bb3cfa3e760388b4f15d9d7707981b88a5c1ce566159198da1c9f8d"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 1376,
-      "sha256": "28dabd466e100e8c84e34eb5d301f081469d4ef99281b6ec0804b688babbffe0"
+      "bytes": 1508,
+      "sha256": "444f612fdb91bb3cf2e4a9d8a9e511b4c6088258cec878eeb8abe65d53307ffc"
     },
     {
       "path": "LICENSE.txt",
@@ -45,6 +45,11 @@
       "path": "docs/TIERED_ARM_TRACE.md",
       "bytes": 820,
       "sha256": "7b4ac7b1720869e8b6aa88f2f7a7cb3beb41ca1db8706c47355fc7f865ff45d1"
+    },
+    {
+      "path": "docs/UEFI_HASH_BACKEND.md",
+      "bytes": 974,
+      "sha256": "1acf728578f99b6b3b0a978d83bcbb1533a8006d3a02479dd91ec2801c79810f"
     },
     {
       "path": "examples/audit_kc.rs",
@@ -73,8 +78,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1400,
-      "sha256": "4556580f1b28dbea8d9212a4a39675737f2f0574df2076d7457f9daafa43dbee"
+      "bytes": 1395,
+      "sha256": "f4e373c0a7b936ffa9962d8430a3f15d699de01ca4a9afe84a5bbf01e90efb66"
     },
     {
       "path": "src/acpi.rs",
