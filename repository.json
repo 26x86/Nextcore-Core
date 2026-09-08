@@ -1,18 +1,34 @@
 {
-  "schema": "26x86.repository/1",
+  "schema": "26x86.repository/2",
   "name": "Nextcore-Core",
   "owner": "26x86",
   "public": true,
   "role": "nextcore-module",
   "crate": "nextcore-core",
   "description": "Public boot configuration and bounded format codecs, including APFS Jumpstart extraction.",
-  "source_path": "nextcore/crates/nextcore-core",
-  "source_commit": "65d1e85db2dfcd4e1c07656bb0bfc315d36fac83",
-  "depends_on": [],
-  "initial_tag": "26x86-Nextcore-Core-v0.1.0",
-  "generated_utc": "2026-09-08T07:49:27.611777+00:00",
-  "release_tag": "26x86-Nextcore-Core-v0.1.2",
-  "previous_head": "66eb69888a9cb8bc56d05f9b2a0bbfab5abfd54b",
-  "dependency_tags": {},
-  "export_method": "immutable git objects applied to existing main; manifest dependency rewrite only"
+  "development": {
+    "branch": "codex/arm64e-boot-metal",
+    "base_commit": "6547be4bbf6b75cf706b89ade4d4a60d5441d223",
+    "updated_utc": "2026-09-08T14:42:36.688484+00:00",
+    "dependency_revisions": {},
+    "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
+  },
+  "release_provenance": {
+    "schema": "26x86.repository/1",
+    "name": "Nextcore-Core",
+    "owner": "26x86",
+    "public": true,
+    "role": "nextcore-module",
+    "crate": "nextcore-core",
+    "description": "Public boot configuration and bounded format codecs, including APFS Jumpstart extraction.",
+    "source_path": "nextcore/crates/nextcore-core",
+    "source_commit": "65d1e85db2dfcd4e1c07656bb0bfc315d36fac83",
+    "depends_on": [],
+    "initial_tag": "26x86-Nextcore-Core-v0.1.0",
+    "generated_utc": "2026-09-08T07:49:27.611777+00:00",
+    "release_tag": "26x86-Nextcore-Core-v0.1.2",
+    "previous_head": "66eb69888a9cb8bc56d05f9b2a0bbfab5abfd54b",
+    "dependency_tags": {},
+    "export_method": "immutable git objects applied to existing main; manifest dependency rewrite only"
+  }
 }
