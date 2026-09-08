@@ -14,6 +14,7 @@ pub mod device_props;
 #[cfg(feature = "std")]
 pub mod error;
 pub mod flat_dt;
+pub mod firmware_dt;
 #[cfg(feature = "std")]
 pub mod handoff;
 pub mod kc_staging;

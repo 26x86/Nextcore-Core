@@ -28,13 +28,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 916,
-      "sha256": "fb2c0adb4ae811136fa36f3954ca2adead2d1a41beaa0ad3862edbcf4da2448c"
+      "bytes": 1200,
+      "sha256": "d7ec3da6c39dcbcb8733c85016874e6f0cd982137c4f4c105a00ab71c9b45fa4"
     },
     {
       "path": "examples/audit_kc.rs",
       "bytes": 3210,
       "sha256": "b793f1610ff09470b20bdc1458987ab24f03faf642ea87a8165dc583c1ad7afe"
+    },
+    {
+      "path": "examples/inspect_firmware_dt.rs",
+      "bytes": 1353,
+      "sha256": "8e92ddcc9d85febbbaa53a0ad4aba80523f756db2d9f878f5182490e6d438dfc"
     },
     {
       "path": "examples/inspect_kc.rs",
@@ -54,7 +59,7 @@
     {
       "path": "repository.json",
       "bytes": 1394,
-      "sha256": "10027032abd59648456662d11488dde4d95f3aabdd4a25883a93295a5b1d8c0c"
+      "sha256": "a7b39a109482e235b64a416836a95409fa8dd0c27d6aa496f4c91968a3355c3a"
     },
     {
       "path": "src/acpi.rs",
@@ -90,6 +95,11 @@
       "path": "src/error.rs",
       "bytes": 1030,
       "sha256": "2f736d1824ddb93803c8be5a5e8baabbbb901d868b172a4fe27392d807588d7a"
+    },
+    {
+      "path": "src/firmware_dt.rs",
+      "bytes": 8728,
+      "sha256": "59382d8b73dd581c691d01cf59dbf7e42e1a2fce010d498fa2b66e4fcf8de477"
     },
     {
       "path": "src/flat_dt.rs",
@@ -128,8 +138,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 734,
-      "sha256": "678441ef10e9f1d0d050ae7f9a12b67a26afde4d1b15165cb49565b886d04230"
+      "bytes": 755,
+      "sha256": "c83969cf3b1125aeab6a821f28fbd15bd2c92b645824a43c5517a72d325d2e24"
     },
     {
       "path": "src/mach_o.rs",
@@ -210,6 +220,11 @@
       "path": "tests/device_props.rs",
       "bytes": 3056,
       "sha256": "a604aa98f79372a04beb2e6f2a68d50ece7015bef63bb06381f18f08f1f85f36"
+    },
+    {
+      "path": "tests/firmware_dt.rs",
+      "bytes": 7121,
+      "sha256": "e46ca963263bb85652d10cc4e979347d1bcbada2c1a3edfffe7f8531eb10b827"
     },
     {
       "path": "tests/flat_dt.rs",

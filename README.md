@@ -18,3 +18,9 @@ cargo check --no-default-features
 
 Original restore components and private input analyses are never bundled. Earlier
 release metadata remains intact under `release_provenance` in `repository.json`.
+
+
+`firmware_dt` borrows raw firmware property bytes and identifies unresolved
+value templates separately from runtime data. Converting template-bearing input
+to a runtime DeviceTree is explicitly rejected; no template bit is stripped to
+make an unresolved input appear ready for XNU.
