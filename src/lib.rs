@@ -16,6 +16,7 @@ pub mod error;
 pub mod flat_dt;
 pub mod firmware_dt;
 pub mod runtime_dt;
+pub mod guest_memory;
 #[cfg(feature = "std")]
 pub mod handoff;
 pub mod kc_staging;
