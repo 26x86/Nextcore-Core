@@ -7,9 +7,9 @@
   "crate": "nextcore-core",
   "description": "Public boot configuration and bounded format codecs, including APFS Jumpstart extraction.",
   "development": {
-    "branch": "codex/arm64e-boot-metal",
+    "branch": "codex/tiered-trace-budget",
     "base_commit": "6547be4bbf6b75cf706b89ade4d4a60d5441d223",
-    "updated_utc": "2026-09-08T14:42:36.688484+00:00",
+    "updated_utc": "2026-09-08T16:46:07.724853+00:00",
     "dependency_revisions": {},
     "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
   },
