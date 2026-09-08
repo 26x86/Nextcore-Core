@@ -373,6 +373,18 @@ fn parse_named_kernel_target(input: &[u8], arm: bool) -> Result<KernelTarget> {
 /// provisioned. The prefix is bounded to eight instructions without a platform
 /// profile, or64 with the explicit software interrupt compatibility profile.
 pub fn parse_arm64_trace_configuration(input: &[u8]) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_configuration_with_limit(input, 64)
+}
+
+/// Explicit diagnostic-only extension. Default callers retain the64/8 entry.
+/// The limit and any budget above64 must be an approved bounded tier.
+pub fn parse_arm64_trace_configuration_with_limit(
+    input: &[u8],
+    maximum_budget: u64,
+) -> Result<Arm64TraceConfiguration> {
+    if !matches!(maximum_budget, 64 | 256 | 1024 | 4096) {
+        return Err(BootConfigError::InvalidTraceConfiguration);
+    }
     if parse_arm64_kernel_target(input)?.profile != KernelProfile::X86EfiArm64Trace {
         return Err(BootConfigError::UnsupportedKernelProfile);
     }
@@ -440,7 +452,9 @@ pub fn parse_arm64_trace_configuration(input: &[u8]) -> Result<Arm64TraceConfigu
         || result.kernel_phys < result.physical_base
         || result.kernel_phys >= result.physical_base + result.memory_size
         || result.instruction_budget == 0
-        || result.instruction_budget > if result.platform.is_some() { 64 } else { 8 }
+        || result.instruction_budget > if result.platform.is_some() { maximum_budget } else { 8 }
+        || (result.instruction_budget > 64
+            && !matches!(result.instruction_budget, 256 | 1024 | 4096))
     {
         return Err(BootConfigError::InvalidTraceConfiguration);
     }
