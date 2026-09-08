@@ -385,6 +385,23 @@ pub fn parse_arm64_trace_configuration_with_limit(
     if !matches!(maximum_budget, 64 | 256 | 1024 | 4096) {
         return Err(BootConfigError::InvalidTraceConfiguration);
     }
+    parse_arm64_trace_with_policy(input, maximum_budget, false)
+}
+
+/// Separately selected diagnostic capability. Without DiagnosticTier, retain
+/// the existing4096 ceiling. The exact deep-16384 selector requires budget16384
+/// and the named software profile; ordinary parser entries reject this selector.
+pub fn parse_arm64_trace_configuration_with_deep_tier(
+    input: &[u8],
+) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_with_policy(input, 4096, true)
+}
+
+fn parse_arm64_trace_with_policy(
+    input: &[u8],
+    maximum_budget: u64,
+    deep_capable: bool,
+) -> Result<Arm64TraceConfiguration> {
     if parse_arm64_kernel_target(input)?.profile != KernelProfile::X86EfiArm64Trace {
         return Err(BootConfigError::UnsupportedKernelProfile);
     }
@@ -401,6 +418,19 @@ pub fn parse_arm64_trace_configuration_with_limit(
     let trace =
         dictionary_value(kernel, "Trace")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(trace, "dict")?;
+    let deep_selected = if let Some(tier) = dictionary_value(trace, "DiagnosticTier")? {
+        if !deep_capable {
+            return Err(BootConfigError::InvalidTraceConfiguration);
+        }
+        require_tag(tier, "string")?;
+        if scalar_text(tier)? != "deep-16384" {
+            return Err(BootConfigError::InvalidTraceConfiguration);
+        }
+        true
+    } else {
+        false
+    };
+    let maximum_budget = if deep_selected { 16384 } else { maximum_budget };
     let abi =
         dictionary_value(trace, "HandoffAbi")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(abi, "string")?;
@@ -452,9 +482,11 @@ pub fn parse_arm64_trace_configuration_with_limit(
         || result.kernel_phys < result.physical_base
         || result.kernel_phys >= result.physical_base + result.memory_size
         || result.instruction_budget == 0
+        || (deep_selected && (result.instruction_budget != 16384 || result.platform.is_none()))
         || result.instruction_budget > if result.platform.is_some() { maximum_budget } else { 8 }
         || (result.instruction_budget > 64
-            && !matches!(result.instruction_budget, 256 | 1024 | 4096))
+            && !matches!(result.instruction_budget, 256 | 1024 | 4096)
+            && !(deep_selected && result.instruction_budget == 16384))
     {
         return Err(BootConfigError::InvalidTraceConfiguration);
     }
