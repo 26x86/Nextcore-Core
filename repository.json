@@ -7,9 +7,9 @@
   "crate": "nextcore-core",
   "description": "Public boot configuration and bounded format codecs, including APFS Jumpstart extraction.",
   "development": {
-    "branch": "codex/guest-allocation-ledger",
+    "branch": "codex/deep-arm-trace",
     "base_commit": "6547be4bbf6b75cf706b89ade4d4a60d5441d223",
-    "updated_utc": "2026-09-08T19:09:24.553614+00:00",
+    "updated_utc": "2026-09-08T20:09:41.285780+00:00",
     "dependency_revisions": {},
     "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
   },

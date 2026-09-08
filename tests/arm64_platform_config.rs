@@ -1,6 +1,7 @@
 use nextcore_core::boot_config::{
     parse_arm64_trace_configuration as parse, Arm64PlatformProfile, BootConfigError as E,
     parse_arm64_trace_configuration_with_limit as parse_with_limit,
+    parse_arm64_trace_configuration_with_deep_tier as parse_deep,
 };
 
 fn config(profile: Option<&str>, options: Option<&str>, budget: u64) -> Vec<u8> {
@@ -217,4 +218,52 @@ fn unknown_types_duplicates_and_unrecognized_options_are_not_silently_ignored() 
         parse(&config(Some(PROFILE), Some(&repeated), 8)),
         Err(E::DuplicateKey)
     );
+}
+
+fn selected(input: Vec<u8>, body: &str) -> Vec<u8> {
+    String::from_utf8(input).unwrap().replace("<key>HandoffAbi</key>",
+        &format!("<key>DiagnosticTier</key>{body}<key>HandoffAbi</key>")).into_bytes()
+}
+#[test]
+fn deep_capability_preserves_existing_entries_and_unselected_tiers() {
+    for profile in [None, Some(PROFILE)] {
+        for budget in [1,8,9,64,65,256,512,1024,4096,8192,16384,16385] {
+            let input=config(profile,None,budget);
+            assert_eq!(parse_deep(&input),parse_with_limit(&input,4096));
+        }
+    }
+    assert_eq!(parse_with_limit(&config(Some(PROFILE),None,8),16384),Err(E::InvalidTraceConfiguration));
+    let input=selected(config(Some(PROFILE),None,16384),"<string>deep-16384</string>");
+    assert_eq!(parse_deep(&input).unwrap().instruction_budget,16384);
+    assert_eq!(parse(&input),Err(E::InvalidTraceConfiguration));
+    for limit in [64,256,1024,4096] {
+        assert_eq!(parse_with_limit(&input,limit),Err(E::InvalidTraceConfiguration));
+        let lower=selected(config(Some(PROFILE),None,8),"<string>deep-16384</string>");
+        assert_eq!(parse_with_limit(&lower,limit),Err(E::InvalidTraceConfiguration));
+    }
+}
+#[test]
+fn deep_selector_requires_exact_type_value_budget_and_profile() {
+    for budget in [0,8,64,256,1024,4096,8192,16383,16385,u64::MAX] {
+        let input=selected(config(Some(PROFILE),None,budget),"<string>deep-16384</string>");
+        assert_eq!(parse_deep(&input),Err(E::InvalidTraceConfiguration));
+    }
+    assert_eq!(parse_deep(&selected(config(None,None,16384),"<string>deep-16384</string>")),Err(E::InvalidTraceConfiguration));
+    for name in ["", "16384", "deep-16385", "automatic"] {
+        assert_eq!(parse_deep(&selected(config(Some(PROFILE),None,16384),&format!("<string>{name}</string>"))),Err(E::InvalidTraceConfiguration));
+    }
+    for body in ["<integer>16384</integer>","<true/>","<dict/>"] {
+        assert_eq!(parse_deep(&selected(config(Some(PROFILE),None,16384),body)),Err(E::InvalidType));
+    }
+    let duplicate="<string>deep-16384</string><key>DiagnosticTier</key><string>deep-16384</string>";
+    assert_eq!(parse_deep(&selected(config(Some(PROFILE),None,16384),duplicate)),Err(E::DuplicateKey));
+}
+#[test]
+fn deep_selection_retains_handoff_placement_and_platform_validation() {
+    let valid=String::from_utf8(selected(config(Some(PROFILE),None,16384),"<string>deep-16384</string>")).unwrap();
+    for wrong in [valid.replace("unprovisioned-sptm-prefix","automatic"),valid.replace("0x40000000","0x40000001")] {
+        assert_eq!(parse_deep(wrong.as_bytes()),Err(E::InvalidTraceConfiguration));
+    }
+    let wrong=selected(config(Some(PROFILE),Some(&integer("IrqLevel",2)),16384),"<string>deep-16384</string>");
+    assert_eq!(parse_deep(&wrong),Err(E::InvalidPlatformConfiguration));
 }
