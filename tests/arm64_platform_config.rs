@@ -1,5 +1,6 @@
 use nextcore_core::boot_config::{
     parse_arm64_trace_configuration as parse, Arm64PlatformProfile, BootConfigError as E,
+    parse_arm64_trace_configuration_with_limit as parse_with_limit,
 };
 
 fn config(profile: Option<&str>, options: Option<&str>, budget: u64) -> Vec<u8> {
@@ -22,6 +23,47 @@ fn integer(name: &str, value: u64) -> String {
     format!("<key>{name}</key><integer>{value}</integer>")
 }
 const PROFILE: &str = "nextcore-irq-compat-v1";
+
+#[test]
+fn explicit_tiers_require_a_valid_ceiling_and_do_not_change_the_default_entry() {
+    for maximum in [64, 256, 1024, 4096] {
+        for budget in [1, 8, 63, 64, 256, 1024, 4096] {
+            let input = config(Some(PROFILE), None, budget);
+            assert_eq!(parse_with_limit(&input, maximum).is_ok(), budget <= maximum);
+            assert_eq!(parse(&input).is_ok(), budget <= 64);
+        }
+    }
+    for maximum in [0, 8, 65, 255, 1023, 4097, u64::MAX] {
+        assert_eq!(parse_with_limit(&config(Some(PROFILE), None, 8), maximum), Err(E::InvalidTraceConfiguration));
+    }
+}
+
+#[test]
+fn unsupported_extended_budgets_never_become_arbitrary_long_runs() {
+    for budget in [0, 65, 128, 255, 257, 512, 1023, 1025, 2048, 4095, 4097, u64::MAX] {
+        assert_eq!(parse_with_limit(&config(Some(PROFILE), None, budget), 4096), Err(E::InvalidTraceConfiguration));
+    }
+}
+
+#[test]
+fn extended_ceiling_does_not_provision_a_profile_or_expand_its_absent_bound() {
+    for maximum in [64, 256, 1024, 4096] {
+        assert_eq!(parse_with_limit(&config(None, None, 8), maximum).unwrap().platform, None);
+        for budget in [9, 64, 256, 1024, 4096] {
+            assert_eq!(parse_with_limit(&config(None, None, budget), maximum), Err(E::InvalidTraceConfiguration));
+        }
+    }
+}
+
+#[test]
+fn extended_configuration_retains_handoff_memory_and_platform_validation() {
+    let valid = String::from_utf8(config(Some(PROFILE), None, 256)).unwrap();
+    for input in [valid.replace("unprovisioned-sptm-prefix", "automatic"),
+                  valid.replace("0x40000000", "0x40000001")] {
+        assert_eq!(parse_with_limit(input.as_bytes(), 4096), Err(E::InvalidTraceConfiguration));
+    }
+    assert_eq!(parse_with_limit(&config(Some(PROFILE), Some(&integer("IrqLevel", 2)), 256), 4096), Err(E::InvalidPlatformConfiguration));
+}
 
 #[test]
 fn absent_profile_retains_old_bound_and_does_not_create_a_provider() {

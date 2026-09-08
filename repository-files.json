@@ -32,6 +32,11 @@
       "sha256": "d7ec3da6c39dcbcb8733c85016874e6f0cd982137c4f4c105a00ab71c9b45fa4"
     },
     {
+      "path": "docs/TIERED_ARM_TRACE.md",
+      "bytes": 820,
+      "sha256": "7b4ac7b1720869e8b6aa88f2f7a7cb3beb41ca1db8706c47355fc7f865ff45d1"
+    },
+    {
       "path": "examples/audit_kc.rs",
       "bytes": 3210,
       "sha256": "b793f1610ff09470b20bdc1458987ab24f03faf642ea87a8165dc583c1ad7afe"
@@ -58,8 +63,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1394,
-      "sha256": "64f2d11a45a5e2a9bab8a704d63a9757582d4069a1f32e6ec992363253ff912d"
+      "bytes": 1396,
+      "sha256": "fe17d7e0d4979fde4916c92631cb65fda8e2732aabd3d5237cf3af2392d86abd"
     },
     {
       "path": "src/acpi.rs",
@@ -73,8 +78,8 @@
     },
     {
       "path": "src/boot_config.rs",
-      "bytes": 30591,
-      "sha256": "c182ddc16b84501f032de336fb4c63ccd35c3b2f5eca6f3da8a4d5a4ea14a253"
+      "bytes": 31190,
+      "sha256": "be0e13ec360759c4605f16d34b53c904fb700246da3e7e08382b606069cc81c0"
     },
     {
       "path": "src/boot_picker.rs",
@@ -198,8 +203,8 @@
     },
     {
       "path": "tests/arm64_platform_config.rs",
-      "bytes": 5971,
-      "sha256": "fdd1c27a51a7f71ffb95303de7b2173b1843878836a3bc838fae3ae7a1d6e34e"
+      "bytes": 7880,
+      "sha256": "a6d5e6f56a801a639abdc71fe4e8698a38d904e382f0a6db2a5bd757d4de97bb"
     },
     {
       "path": "tests/boot_config.rs",
