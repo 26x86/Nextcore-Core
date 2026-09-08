@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 1320,
-      "sha256": "b2393acefdc9c6878b1212d7b8114c417a0170dfe372ce42c6b9cdf398eb0580"
+      "bytes": 1376,
+      "sha256": "28dabd466e100e8c84e34eb5d301f081469d4ef99281b6ec0804b688babbffe0"
     },
     {
       "path": "LICENSE.txt",
@@ -30,6 +30,11 @@
       "path": "README.md",
       "bytes": 1200,
       "sha256": "d7ec3da6c39dcbcb8733c85016874e6f0cd982137c4f4c105a00ab71c9b45fa4"
+    },
+    {
+      "path": "docs/RUNTIME_DEVICE_TREE.md",
+      "bytes": 2287,
+      "sha256": "9df2ea38ba7514e5d49757836a9a20a6babe6a920919c7dcd0ea129fac5daf03"
     },
     {
       "path": "docs/TIERED_ARM_TRACE.md",
@@ -64,7 +69,7 @@
     {
       "path": "repository.json",
       "bytes": 1396,
-      "sha256": "fe17d7e0d4979fde4916c92631cb65fda8e2732aabd3d5237cf3af2392d86abd"
+      "sha256": "60da7b4ba295f53e1383120ce5647c562248019ff523322dbf20242328e024a1"
     },
     {
       "path": "src/acpi.rs",
@@ -143,8 +148,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 755,
-      "sha256": "c83969cf3b1125aeab6a821f28fbd15bd2c92b645824a43c5517a72d325d2e24"
+      "bytes": 775,
+      "sha256": "07a5aaa1669867ae4176c7d7f9b123ec2529062975d184ccfda9153d9e54f3b0"
     },
     {
       "path": "src/mach_o.rs",
@@ -155,6 +160,11 @@
       "path": "src/macho_image.rs",
       "bytes": 17374,
       "sha256": "5172454ba59f73558899b31c65eb153b62568de718e6ce38079d71132676ee6e"
+    },
+    {
+      "path": "src/runtime_dt.rs",
+      "bytes": 11385,
+      "sha256": "8bf58240af9ed18b58711a1c928ae99a4e7e9aebc68174fed459ec3165013f32"
     },
     {
       "path": "src/xnu_arm64_boot_args.rs",
@@ -290,6 +300,11 @@
       "path": "tests/picker_view.rs",
       "bytes": 2815,
       "sha256": "4c31b98ba31a8f63181a56735afb7a4e777d4490b5c045c480dce5fcc8333e9e"
+    },
+    {
+      "path": "tests/runtime_dt.rs",
+      "bytes": 13311,
+      "sha256": "042a9ce870f5955dcd54734735245944fce0ce0bea821f1dccbfe7aff5c7a3d1"
     },
     {
       "path": "tests/sample.plist",

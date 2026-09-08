@@ -15,6 +15,7 @@ pub mod device_props;
 pub mod error;
 pub mod flat_dt;
 pub mod firmware_dt;
+pub mod runtime_dt;
 #[cfg(feature = "std")]
 pub mod handoff;
 pub mod kc_staging;
