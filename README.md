@@ -1,9 +1,26 @@
-# NextCore Core
+# Nextcore-Core
 
-Public boot configuration and bounded format codecs, including APFS Jumpstart extraction.
+Public boot configuration, bounded format codecs, APFS Jumpstart extraction,
+and ARM64/ARM64e kernel-collection placement. This is an independent repository;
+the integration project consumes an immutable submodule commit.
 
-Source snapshot: [65d1e85db2dfcd4e1c07656bb0bfc315d36fac83](https://github.com/26x86/26x86/commit/65d1e85db2dfcd4e1c07656bb0bfc315d36fac83).
+The ARM handoff planner validates segment placement, memory and entry ranges,
+flat device-tree structure and boot-argument layout. Configuration distinguishes
+an authored x86-EFI ARM JIT fixture from a bounded, explicitly unprovisioned
+SPTM-prefix diagnostic. An ARM kernel build does not change the physical x86
+execution target. Staging validates data placement and preservation; it does not
+establish macOS boot or complete SPTM services.
 
-Repository release: `26x86-Nextcore-Core-v0.1.2`. Cargo package version is preserved from source.
+```sh
+cargo test --all-targets
+cargo check --no-default-features
+```
 
-Public source only; no Apple firmware, filesystem driver payload, operating-system image or private research input is bundled. Module checks establish their stated source/build boundary; they do not establish installed macOS boot, guest Metal or physical hardware support.
+Original restore components and private input analyses are never bundled. Earlier
+release metadata remains intact under `release_provenance` in `repository.json`.
+
+
+`firmware_dt` borrows raw firmware property bytes and identifies unresolved
+value templates separately from runtime data. Converting template-bearing input
+to a runtime DeviceTree is explicitly rejected; no template bit is stripped to
+make an unresolved input appear ready for XNU.

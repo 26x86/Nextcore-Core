@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 472,
-      "sha256": "d040b6f37475c77b6c851cf7d4b10e203d0841d109d6bf55710509139d1cf3f3"
+      "bytes": 558,
+      "sha256": "614619021774afa0a0f732d683db305b07a42f144cd6f4098562170eb6ad5de3"
     },
     {
       "path": ".gitignore",
@@ -28,13 +28,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 622,
-      "sha256": "cbfa9ffee576bb9bdb0bae87381b3d79c7f6cf382286fd270fbe834d8cf0d0ba"
+      "bytes": 1200,
+      "sha256": "d7ec3da6c39dcbcb8733c85016874e6f0cd982137c4f4c105a00ab71c9b45fa4"
     },
     {
       "path": "examples/audit_kc.rs",
       "bytes": 3210,
       "sha256": "b793f1610ff09470b20bdc1458987ab24f03faf642ea87a8165dc583c1ad7afe"
+    },
+    {
+      "path": "examples/inspect_firmware_dt.rs",
+      "bytes": 1353,
+      "sha256": "8e92ddcc9d85febbbaa53a0ad4aba80523f756db2d9f878f5182490e6d438dfc"
     },
     {
       "path": "examples/inspect_kc.rs",
@@ -52,6 +57,11 @@
       "sha256": "502ce4e129dc6342acfe1aeee9aabd6f1b97d33e2bce4eca6ca1a6de61fdd940"
     },
     {
+      "path": "repository.json",
+      "bytes": 1394,
+      "sha256": "64f2d11a45a5e2a9bab8a704d63a9757582d4069a1f32e6ec992363253ff912d"
+    },
+    {
       "path": "src/acpi.rs",
       "bytes": 7863,
       "sha256": "1f8b0e7ce514dcbe11caa4da4e464cd35f907015353bdb75faf47bc0464ab063"
@@ -63,8 +73,8 @@
     },
     {
       "path": "src/boot_config.rs",
-      "bytes": 21002,
-      "sha256": "dc9faf72db5361f4cd77c8d9b2f8b69844f7308eb83d7cf1b9b146c803f90e71"
+      "bytes": 30591,
+      "sha256": "c182ddc16b84501f032de336fb4c63ccd35c3b2f5eca6f3da8a4d5a4ea14a253"
     },
     {
       "path": "src/boot_picker.rs",
@@ -85,6 +95,11 @@
       "path": "src/error.rs",
       "bytes": 1030,
       "sha256": "2f736d1824ddb93803c8be5a5e8baabbbb901d868b172a4fe27392d807588d7a"
+    },
+    {
+      "path": "src/firmware_dt.rs",
+      "bytes": 8728,
+      "sha256": "59382d8b73dd581c691d01cf59dbf7e42e1a2fce010d498fa2b66e4fcf8de477"
     },
     {
       "path": "src/flat_dt.rs",
@@ -123,8 +138,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 707,
-      "sha256": "2ea37785af02f226b4bd86ecb0975759cc79c777fd16d4fcf61bfc0b9825c9cc"
+      "bytes": 755,
+      "sha256": "c83969cf3b1125aeab6a821f28fbd15bd2c92b645824a43c5517a72d325d2e24"
     },
     {
       "path": "src/mach_o.rs",
@@ -142,6 +157,11 @@
       "sha256": "47945c5210fc8e9cfbb928328d41a8e0761acaccc61e3c7223bfd04255955175"
     },
     {
+      "path": "src/xnu_arm64_handoff.rs",
+      "bytes": 8607,
+      "sha256": "50132d9535955ff61f5b763bfd0296e1ef98d998b09f73ccadbce34b45801051"
+    },
+    {
       "path": "src/xnu_boot_args.rs",
       "bytes": 9741,
       "sha256": "6ea54cc90189d98bb01b5dea73e40a2d9bd0b80edeea7562d56589b8c50232c3"
@@ -152,14 +172,34 @@
       "sha256": "f159719e5e14b11dd4241d2bc4dcf73bfc66126a68059c30b3b213673db868ce"
     },
     {
+      "path": "tests/apfs_boot_config.rs",
+      "bytes": 5292,
+      "sha256": "796d0d1c6caa115085057cdb031d9e3340c55d963606de3f1decc8e2bdac95dd"
+    },
+    {
       "path": "tests/apfs_jumpstart.rs",
       "bytes": 16134,
       "sha256": "95e06552c59eb8d53da98283a4384f2eb876dc3334c63b0a634d8351266b0bac"
     },
     {
+      "path": "tests/arm64_boot_config.rs",
+      "bytes": 4320,
+      "sha256": "68ea8050ab5a027773573027e23fc0e02d38029adc2bfbde08b5bad37950c03a"
+    },
+    {
+      "path": "tests/arm64_handoff.rs",
+      "bytes": 6262,
+      "sha256": "f18d7468558d5f78b6817e33e432ab4133d1b92881d356ea742bc7e7048b0a1d"
+    },
+    {
       "path": "tests/arm64_kernel_collection.rs",
       "bytes": 11665,
       "sha256": "130bc4b732d0ac86084c5a83f39630ee155f4c030118f0749f2b0ea001964351"
+    },
+    {
+      "path": "tests/arm64_platform_config.rs",
+      "bytes": 5971,
+      "sha256": "fdd1c27a51a7f71ffb95303de7b2173b1843878836a3bc838fae3ae7a1d6e34e"
     },
     {
       "path": "tests/boot_config.rs",
@@ -185,6 +225,11 @@
       "path": "tests/device_props.rs",
       "bytes": 3056,
       "sha256": "a604aa98f79372a04beb2e6f2a68d50ece7015bef63bb06381f18f08f1f85f36"
+    },
+    {
+      "path": "tests/firmware_dt.rs",
+      "bytes": 7121,
+      "sha256": "e46ca963263bb85652d10cc4e979347d1bcbada2c1a3edfffe7f8531eb10b827"
     },
     {
       "path": "tests/flat_dt.rs",

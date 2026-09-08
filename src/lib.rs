@@ -14,6 +14,7 @@ pub mod device_props;
 #[cfg(feature = "std")]
 pub mod error;
 pub mod flat_dt;
+pub mod firmware_dt;
 #[cfg(feature = "std")]
 pub mod handoff;
 pub mod kc_staging;
@@ -27,6 +28,7 @@ pub mod mach_o;
 pub mod macho_image;
 pub mod xnu_boot_args;
 pub mod xnu_arm64_boot_args;
+pub mod xnu_arm64_handoff;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
