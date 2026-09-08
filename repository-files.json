@@ -59,7 +59,7 @@
     {
       "path": "repository.json",
       "bytes": 1394,
-      "sha256": "a7b39a109482e235b64a416836a95409fa8dd0c27d6aa496f4c91968a3355c3a"
+      "sha256": "64f2d11a45a5e2a9bab8a704d63a9757582d4069a1f32e6ec992363253ff912d"
     },
     {
       "path": "src/acpi.rs",
@@ -73,8 +73,8 @@
     },
     {
       "path": "src/boot_config.rs",
-      "bytes": 26729,
-      "sha256": "982464f4d71d1baed4c8da3f7429e30467bbf7d11da06d80dc550906e45e2caa"
+      "bytes": 30591,
+      "sha256": "c182ddc16b84501f032de336fb4c63ccd35c3b2f5eca6f3da8a4d5a4ea14a253"
     },
     {
       "path": "src/boot_picker.rs",
@@ -195,6 +195,11 @@
       "path": "tests/arm64_kernel_collection.rs",
       "bytes": 11665,
       "sha256": "130bc4b732d0ac86084c5a83f39630ee155f4c030118f0749f2b0ea001964351"
+    },
+    {
+      "path": "tests/arm64_platform_config.rs",
+      "bytes": 5971,
+      "sha256": "fdd1c27a51a7f71ffb95303de7b2173b1843878836a3bc838fae3ae7a1d6e34e"
     },
     {
       "path": "tests/boot_config.rs",

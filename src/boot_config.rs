@@ -73,6 +73,23 @@ pub struct Arm64TraceConfiguration {
     pub kernel_phys: u64,
     pub device_tree_path: String,
     pub instruction_budget: u64,
+    pub platform: Option<Arm64PlatformConfiguration>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Arm64PlatformProfile {
+    /// Defined software IRQ/FIQ compatibility state, not a measured Apple reset.
+    NextcoreIrqCompatV1,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Arm64PlatformConfiguration {
+    pub profile: Arm64PlatformProfile,
+    pub initial_override: u64,
+    pub initial_pstate: u64,
+    pub vector_base: u64,
+    pub irq_level: bool,
+    pub fiq_level: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -98,6 +115,7 @@ pub enum BootConfigError {
     InvalidDisplayName,
     InvalidApfsVolume,
     InvalidTraceConfiguration,
+    InvalidPlatformConfiguration,
 }
 
 impl fmt::Display for BootConfigError {
@@ -125,6 +143,7 @@ impl fmt::Display for BootConfigError {
             Self::InvalidDisplayName => "INVALID_DISPLAY_NAME",
             Self::InvalidApfsVolume => "INVALID_APFS_VOLUME",
             Self::InvalidTraceConfiguration => "INVALID_ARM64_TRACE_CONFIGURATION",
+            Self::InvalidPlatformConfiguration => "INVALID_ARM64_PLATFORM_CONFIGURATION",
         })
     }
 }
@@ -351,7 +370,8 @@ fn parse_named_kernel_target(input: &[u8], arm: bool) -> Result<KernelTarget> {
 
 /// A trace must explicitly select the incomplete SPTM cold-entry diagnostic.
 /// The supplied DT has diagnostic status only; no SPTM argument or service is
-/// provisioned. Eight instructions cap the unprovisioned entry prefix.
+/// provisioned. The prefix is bounded to eight instructions without a platform
+/// profile, or64 with the explicit software interrupt compatibility profile.
 pub fn parse_arm64_trace_configuration(input: &[u8]) -> Result<Arm64TraceConfiguration> {
     if parse_arm64_kernel_target(input)?.profile != KernelProfile::X86EfiArm64Trace {
         return Err(BootConfigError::UnsupportedKernelProfile);
@@ -399,6 +419,7 @@ pub fn parse_arm64_trace_configuration(input: &[u8]) -> Result<Arm64TraceConfigu
         kernel_phys: number("KernelPhysical")?,
         device_tree_path: normalize_absolute_path(&scalar_text(path)?)?,
         instruction_budget: number("InstructionBudget")?,
+        platform: parse_arm64_platform_configuration(trace)?,
     };
     if result.memory_size < 16 * 1024 * 1024
         || result.memory_size > 1024 * 1024 * 1024
@@ -419,11 +440,95 @@ pub fn parse_arm64_trace_configuration(input: &[u8]) -> Result<Arm64TraceConfigu
         || result.kernel_phys < result.physical_base
         || result.kernel_phys >= result.physical_base + result.memory_size
         || result.instruction_budget == 0
-        || result.instruction_budget > 8
+        || result.instruction_budget > if result.platform.is_some() { 64 } else { 8 }
     {
         return Err(BootConfigError::InvalidTraceConfiguration);
     }
+    if let Some(platform) = result.platform {
+        if platform.vector_base != 0
+            && (platform.vector_base < result.physical_base
+                || platform
+                    .vector_base
+                    .checked_add(2048)
+                    .is_none_or(|end| end > result.physical_base + result.memory_size))
+        {
+            return Err(BootConfigError::InvalidPlatformConfiguration);
+        }
+    }
     Ok(result)
+}
+
+fn parse_arm64_platform_configuration(
+    trace: Node<'_, '_>,
+) -> Result<Option<Arm64PlatformConfiguration>> {
+    let profile = dictionary_value(trace, "PlatformProfile")?;
+    let options = dictionary_value(trace, "Platform")?;
+    let Some(profile) = profile else {
+        return if options.is_none() {
+            Ok(None)
+        } else {
+            Err(BootConfigError::InvalidPlatformConfiguration)
+        };
+    };
+    require_tag(profile, "string")?;
+    if scalar_text(profile)? != "nextcore-irq-compat-v1" {
+        return Err(BootConfigError::InvalidPlatformConfiguration);
+    }
+    if let Some(options) = options {
+        require_tag(options, "dict")?;
+        for key in options
+            .children()
+            .filter(|node| node.is_element() && node.has_tag_name("key"))
+        {
+            if !matches!(
+                scalar_text(key)?.as_str(),
+                "InitialOverride" | "InitialPstate" | "VectorBase" | "IrqLevel" | "FiqLevel"
+            ) {
+                return Err(BootConfigError::InvalidPlatformConfiguration);
+            }
+        }
+    }
+    let number = |name: &str, default: u64| -> Result<u64> {
+        let Some(options) = options else {
+            return Ok(default);
+        };
+        let Some(node) = dictionary_value(options, name)? else {
+            return Ok(default);
+        };
+        require_tag(node, "integer")?;
+        let text = scalar_text(node)?;
+        let text = text.trim();
+        if let Some(hex) = text.strip_prefix("0x") {
+            u64::from_str_radix(hex, 16)
+        } else {
+            text.parse::<u64>()
+        }
+        .map_err(|_| BootConfigError::InvalidPlatformConfiguration)
+    };
+    let initial_override = number("InitialOverride", 0)?;
+    let initial_pstate = number("InitialPstate", 0x3c5)?;
+    let vector_base = number("VectorBase", 0)?;
+    let irq_level = number("IrqLevel", 0)?;
+    let fiq_level = number("FiqLevel", 0)?;
+    if initial_override & !0x00f0_0000 != 0
+        || !matches!((initial_override >> 20) & 3, 0 | 2)
+        || !matches!((initial_override >> 22) & 3, 0 | 2)
+        || initial_pstate & !0xf000_03cfu64 != 0
+        || !matches!(initial_pstate & 15, 4 | 5)
+        || vector_base & 2047 != 0
+        || irq_level > 1
+        || fiq_level > 1
+    {
+        return Err(BootConfigError::InvalidPlatformConfiguration);
+    }
+    Ok(Some(Arm64PlatformConfiguration {
+        profile: Arm64PlatformProfile::NextcoreIrqCompatV1,
+        initial_override,
+        initial_pstate,
+        vector_base,
+        irq_level: irq_level != 0,
+        fiq_level: fiq_level != 0,
+    }))
 }
 
 fn select_boot_target(document: &Document<'_>) -> Result<Option<BootTarget>> {
