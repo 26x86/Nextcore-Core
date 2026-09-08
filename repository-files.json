@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 472,
-      "sha256": "d040b6f37475c77b6c851cf7d4b10e203d0841d109d6bf55710509139d1cf3f3"
+      "bytes": 558,
+      "sha256": "614619021774afa0a0f732d683db305b07a42f144cd6f4098562170eb6ad5de3"
     },
     {
       "path": ".gitignore",
@@ -28,8 +28,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 622,
-      "sha256": "cbfa9ffee576bb9bdb0bae87381b3d79c7f6cf382286fd270fbe834d8cf0d0ba"
+      "bytes": 916,
+      "sha256": "fb2c0adb4ae811136fa36f3954ca2adead2d1a41beaa0ad3862edbcf4da2448c"
     },
     {
       "path": "examples/audit_kc.rs",
@@ -52,6 +52,11 @@
       "sha256": "502ce4e129dc6342acfe1aeee9aabd6f1b97d33e2bce4eca6ca1a6de61fdd940"
     },
     {
+      "path": "repository.json",
+      "bytes": 1394,
+      "sha256": "10027032abd59648456662d11488dde4d95f3aabdd4a25883a93295a5b1d8c0c"
+    },
+    {
       "path": "src/acpi.rs",
       "bytes": 7863,
       "sha256": "1f8b0e7ce514dcbe11caa4da4e464cd35f907015353bdb75faf47bc0464ab063"
@@ -63,8 +68,8 @@
     },
     {
       "path": "src/boot_config.rs",
-      "bytes": 21002,
-      "sha256": "dc9faf72db5361f4cd77c8d9b2f8b69844f7308eb83d7cf1b9b146c803f90e71"
+      "bytes": 26729,
+      "sha256": "982464f4d71d1baed4c8da3f7429e30467bbf7d11da06d80dc550906e45e2caa"
     },
     {
       "path": "src/boot_picker.rs",
@@ -123,8 +128,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 707,
-      "sha256": "2ea37785af02f226b4bd86ecb0975759cc79c777fd16d4fcf61bfc0b9825c9cc"
+      "bytes": 734,
+      "sha256": "678441ef10e9f1d0d050ae7f9a12b67a26afde4d1b15165cb49565b886d04230"
     },
     {
       "path": "src/mach_o.rs",
@@ -142,6 +147,11 @@
       "sha256": "47945c5210fc8e9cfbb928328d41a8e0761acaccc61e3c7223bfd04255955175"
     },
     {
+      "path": "src/xnu_arm64_handoff.rs",
+      "bytes": 8607,
+      "sha256": "50132d9535955ff61f5b763bfd0296e1ef98d998b09f73ccadbce34b45801051"
+    },
+    {
       "path": "src/xnu_boot_args.rs",
       "bytes": 9741,
       "sha256": "6ea54cc90189d98bb01b5dea73e40a2d9bd0b80edeea7562d56589b8c50232c3"
@@ -152,9 +162,24 @@
       "sha256": "f159719e5e14b11dd4241d2bc4dcf73bfc66126a68059c30b3b213673db868ce"
     },
     {
+      "path": "tests/apfs_boot_config.rs",
+      "bytes": 5292,
+      "sha256": "796d0d1c6caa115085057cdb031d9e3340c55d963606de3f1decc8e2bdac95dd"
+    },
+    {
       "path": "tests/apfs_jumpstart.rs",
       "bytes": 16134,
       "sha256": "95e06552c59eb8d53da98283a4384f2eb876dc3334c63b0a634d8351266b0bac"
+    },
+    {
+      "path": "tests/arm64_boot_config.rs",
+      "bytes": 4320,
+      "sha256": "68ea8050ab5a027773573027e23fc0e02d38029adc2bfbde08b5bad37950c03a"
+    },
+    {
+      "path": "tests/arm64_handoff.rs",
+      "bytes": 6262,
+      "sha256": "f18d7468558d5f78b6817e33e432ab4133d1b92881d356ea742bc7e7048b0a1d"
     },
     {
       "path": "tests/arm64_kernel_collection.rs",

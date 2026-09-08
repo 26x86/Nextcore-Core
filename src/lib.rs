@@ -27,6 +27,7 @@ pub mod mach_o;
 pub mod macho_image;
 pub mod xnu_boot_args;
 pub mod xnu_arm64_boot_args;
+pub mod xnu_arm64_handoff;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 

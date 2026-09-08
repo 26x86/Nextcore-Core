@@ -19,12 +19,15 @@ pub const MAX_ENTRIES: usize = 64;
 pub const MAX_PATH_UTF16_UNITS: usize = 1024;
 /// UTF-16 code units, excluding the NUL terminator added by the EFI caller.
 pub const MAX_ARGUMENTS_UTF16_UNITS: usize = 4096;
+pub const MAX_APFS_VOLUME_UTF16_UNITS: usize = 255;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BootTarget {
-    /// Absolute path on the image's own filesystem, normalized to backslashes.
+    /// Absolute path on the selected filesystem, normalized to backslashes.
     pub path: String,
     pub arguments: String,
+    /// Exact APFS volume label; None retains the image's own filesystem.
+    pub apfs_volume: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -51,6 +54,25 @@ pub struct KernelTarget {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum KernelProfile {
     Xnu12377Pstart32,
+    /// Metadata/staging profile; this name does not authorize kernel execution.
+    XnuArm64Uefi,
+    /// Independently authored QEMU virt test payload, never an Apple kernel.
+    QemuVirtArm64Probe,
+    /// Authored guest running in the x86 EFI ARM translation runtime.
+    X86EfiArm64JitProbe,
+    /// Explicit bounded diagnostic run with caller-provided memory and DT.
+    X86EfiArm64Trace,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Arm64TraceConfiguration {
+    pub physical_base: u64,
+    pub virtual_base: u64,
+    pub memory_size: u64,
+    pub actual_memory_size: u64,
+    pub kernel_phys: u64,
+    pub device_tree_path: String,
+    pub instruction_budget: u64,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -74,6 +96,8 @@ pub enum BootConfigError {
     MissingKernelTarget,
     UnsupportedKernelProfile,
     InvalidDisplayName,
+    InvalidApfsVolume,
+    InvalidTraceConfiguration,
 }
 
 impl fmt::Display for BootConfigError {
@@ -99,6 +123,8 @@ impl fmt::Display for BootConfigError {
             Self::MissingKernelTarget => "MISSING_KERNEL_TARGET",
             Self::UnsupportedKernelProfile => "UNSUPPORTED_KERNEL_PROFILE",
             Self::InvalidDisplayName => "INVALID_DISPLAY_NAME",
+            Self::InvalidApfsVolume => "INVALID_APFS_VOLUME",
+            Self::InvalidTraceConfiguration => "INVALID_ARM64_TRACE_CONFIGURATION",
         })
     }
 }
@@ -176,6 +202,7 @@ pub fn parse_boot_menu(input: &[u8]) -> Result<BootMenu> {
                 text
             }
         };
+        let apfs_volume = parse_apfs_volume(entry)?;
         // Automatic boot historically ignores Name entirely. Display-only
         // validation must not reject a previously accepted single target.
         let name = if !menu.show_picker {
@@ -205,11 +232,30 @@ pub fn parse_boot_menu(input: &[u8]) -> Result<BootMenu> {
                 target: BootTarget {
                     path: path.ok_or(BootConfigError::MissingPath)?,
                     arguments,
+                    apfs_volume,
                 },
             });
         }
     }
     Ok(menu)
+}
+
+fn parse_apfs_volume(entry: Node<'_, '_>) -> Result<Option<String>> {
+    let Some(value) = dictionary_value(entry, "ApfsVolume")? else {
+        return Ok(None);
+    };
+    require_tag(value, "string")?;
+    let text = scalar_text(value)?;
+    if text.is_empty()
+        || text.trim() != text
+        || text
+            .chars()
+            .any(|c| c.is_control() || matches!(c, '/' | '\\'))
+        || text.encode_utf16().count() > MAX_APFS_VOLUME_UTF16_UNITS
+    {
+        return Err(BootConfigError::InvalidApfsVolume);
+    }
+    Ok(Some(text))
 }
 
 fn parse_document(input: &[u8]) -> Result<Document<'_>> {
@@ -249,6 +295,15 @@ fn parse_document(input: &[u8]) -> Result<Document<'_>> {
 
 /// Read the explicitly named kernel profile separately from EFI image targets.
 pub fn parse_kernel_target(input: &[u8]) -> Result<KernelTarget> {
+    parse_named_kernel_target(input, false)
+}
+
+/// Separate ARM selector: Intel callers cannot accidentally accept an ARM ABI.
+pub fn parse_arm64_kernel_target(input: &[u8]) -> Result<KernelTarget> {
+    parse_named_kernel_target(input, true)
+}
+
+fn parse_named_kernel_target(input: &[u8], arm: bool) -> Result<KernelTarget> {
     let document = parse_document(input)?;
     let dictionary = document
         .root_element()
@@ -264,9 +319,14 @@ pub fn parse_kernel_target(input: &[u8]) -> Result<KernelTarget> {
     let profile =
         dictionary_value(kernel, "Profile")?.ok_or(BootConfigError::UnsupportedKernelProfile)?;
     require_tag(profile, "string")?;
-    if scalar_text(profile)? != "xnu-12377-pstart32" {
-        return Err(BootConfigError::UnsupportedKernelProfile);
-    }
+    let profile = match (arm, scalar_text(profile)?.as_str()) {
+        (false, "xnu-12377-pstart32") => KernelProfile::Xnu12377Pstart32,
+        (true, "xnu-arm64-uefi") => KernelProfile::XnuArm64Uefi,
+        (true, "qemu-virt-arm64-probe") => KernelProfile::QemuVirtArm64Probe,
+        (true, "x86-efi-arm64-jit-probe") => KernelProfile::X86EfiArm64JitProbe,
+        (true, "x86-efi-arm64-trace") => KernelProfile::X86EfiArm64Trace,
+        _ => return Err(BootConfigError::UnsupportedKernelProfile),
+    };
     let path = dictionary_value(kernel, "Path")?.ok_or(BootConfigError::MissingPath)?;
     require_tag(path, "string")?;
     let path = normalize_absolute_path(&scalar_text(path)?)?;
@@ -285,8 +345,85 @@ pub fn parse_kernel_target(input: &[u8]) -> Result<KernelTarget> {
     Ok(KernelTarget {
         path,
         arguments,
-        profile: KernelProfile::Xnu12377Pstart32,
+        profile,
     })
+}
+
+/// A trace must explicitly select the incomplete SPTM cold-entry diagnostic.
+/// The supplied DT has diagnostic status only; no SPTM argument or service is
+/// provisioned. Eight instructions cap the unprovisioned entry prefix.
+pub fn parse_arm64_trace_configuration(input: &[u8]) -> Result<Arm64TraceConfiguration> {
+    if parse_arm64_kernel_target(input)?.profile != KernelProfile::X86EfiArm64Trace {
+        return Err(BootConfigError::UnsupportedKernelProfile);
+    }
+    let document = parse_document(input)?;
+    let root = document
+        .root_element()
+        .children()
+        .find(Node::is_element)
+        .ok_or(BootConfigError::InvalidPlist)?;
+    let nextcore =
+        dictionary_value(root, "Nextcore")?.ok_or(BootConfigError::MissingKernelTarget)?;
+    let kernel =
+        dictionary_value(nextcore, "Kernel")?.ok_or(BootConfigError::MissingKernelTarget)?;
+    let trace =
+        dictionary_value(kernel, "Trace")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
+    require_tag(trace, "dict")?;
+    let abi =
+        dictionary_value(trace, "HandoffAbi")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
+    require_tag(abi, "string")?;
+    if scalar_text(abi)? != "unprovisioned-sptm-prefix" {
+        return Err(BootConfigError::InvalidTraceConfiguration);
+    }
+    let number = |name: &str| -> Result<u64> {
+        let node =
+            dictionary_value(trace, name)?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
+        require_tag(node, "integer")?;
+        let text = scalar_text(node)?;
+        let text = text.trim();
+        if let Some(hex) = text.strip_prefix("0x") {
+            u64::from_str_radix(hex, 16)
+        } else {
+            text.parse::<u64>()
+        }
+        .map_err(|_| BootConfigError::InvalidTraceConfiguration)
+    };
+    let path = dictionary_value(trace, "DeviceTreePath")?
+        .ok_or(BootConfigError::InvalidTraceConfiguration)?;
+    require_tag(path, "string")?;
+    let result = Arm64TraceConfiguration {
+        physical_base: number("PhysicalBase")?,
+        virtual_base: number("VirtualBase")?,
+        memory_size: number("MemorySize")?,
+        actual_memory_size: number("ActualMemorySize")?,
+        kernel_phys: number("KernelPhysical")?,
+        device_tree_path: normalize_absolute_path(&scalar_text(path)?)?,
+        instruction_budget: number("InstructionBudget")?,
+    };
+    if result.memory_size < 16 * 1024 * 1024
+        || result.memory_size > 1024 * 1024 * 1024
+        || result.memory_size % 16384 != 0
+        || result.physical_base % 16384 != 0
+        || result.kernel_phys % 16384 != 0
+        || result.virtual_base % 16384 != 0
+        || result.actual_memory_size < result.memory_size
+        || result.actual_memory_size % 16384 != 0
+        || result
+            .physical_base
+            .checked_add(result.memory_size)
+            .is_none()
+        || result
+            .virtual_base
+            .checked_add(result.memory_size)
+            .is_none()
+        || result.kernel_phys < result.physical_base
+        || result.kernel_phys >= result.physical_base + result.memory_size
+        || result.instruction_budget == 0
+        || result.instruction_budget > 8
+    {
+        return Err(BootConfigError::InvalidTraceConfiguration);
+    }
+    Ok(result)
 }
 
 fn select_boot_target(document: &Document<'_>) -> Result<Option<BootTarget>> {
@@ -336,6 +473,7 @@ fn select_boot_target(document: &Document<'_>) -> Result<Option<BootTarget>> {
                 value
             }
         };
+        let apfs_volume = parse_apfs_volume(entry)?;
         if enabled {
             if selected.is_some() {
                 return Err(BootConfigError::AmbiguousTarget);
@@ -343,6 +481,7 @@ fn select_boot_target(document: &Document<'_>) -> Result<Option<BootTarget>> {
             selected = Some(BootTarget {
                 path: path.ok_or(BootConfigError::MissingPath)?,
                 arguments,
+                apfs_volume,
             });
         }
     }
