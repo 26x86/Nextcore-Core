@@ -21,3 +21,7 @@ jobs:
         run: |
           cargo test --no-default-features --test guest_memory
           cargo test --no-default-features --doc
+      - name: Generate actual firmware hashing code in debug and release
+        run: |
+          cargo build --no-default-features --lib --target x86_64-unknown-uefi
+          cargo build --no-default-features --lib --release --target x86_64-unknown-uefi
