@@ -413,10 +413,20 @@ pub fn parse_arm64_trace_configuration_with_long_tier(
     parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Long)
 }
 
+/// Explicit initialization diagnostic; only initialization-67108864 selects
+/// budget 67108864 with the named software profile. Existing deep/long choices
+/// remain available, while omission retains the 4096 ceiling.
+pub fn parse_arm64_trace_configuration_with_initialization_tier(
+    input: &[u8],
+) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Initialization)
+}
+
 enum TraceTierCapability {
     Ordinary,
     Deep,
     Long,
+    Initialization,
 }
 
 fn parse_arm64_trace_with_policy(
@@ -447,7 +457,10 @@ fn parse_arm64_trace_with_policy(
         require_tag(tier, "string")?;
         match scalar_text(tier)?.as_str() {
             "deep-16384" => Some(16384),
-            "long-65536" if matches!(capability, TraceTierCapability::Long) => Some(65536),
+            "long-65536" if matches!(capability,
+                TraceTierCapability::Long | TraceTierCapability::Initialization) => Some(65536),
+            "initialization-67108864" if matches!(capability,
+                TraceTierCapability::Initialization) => Some(67108864),
             _ => return Err(BootConfigError::InvalidTraceConfiguration),
         }
     } else {
