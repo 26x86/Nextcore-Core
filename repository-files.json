@@ -32,6 +32,11 @@
       "sha256": "d7ec3da6c39dcbcb8733c85016874e6f0cd982137c4f4c105a00ab71c9b45fa4"
     },
     {
+      "path": "docs/ARM64_STAGE1_TABLES.md",
+      "bytes": 2742,
+      "sha256": "7024983c1bebf8012aca9224160c11f4c4a79f781174eb05673f74a7876da725"
+    },
+    {
       "path": "docs/DEEP_ARM_TRACE.md",
       "bytes": 1611,
       "sha256": "a982580a0f6e45bb28673fc84b5e7cccc1e3818ce05d2d6c90ef8eb860d5195a"
@@ -104,7 +109,7 @@
     {
       "path": "repository.json",
       "bytes": 1405,
-      "sha256": "5a4babdf697b73da71540e3352a1852ae96e3da0c6cb1bdc33587072c2b25119"
+      "sha256": "f01a95e30356f2f1506bd0540a13359809a41d2ca84396c30ca7290d450c6af6"
     },
     {
       "path": "src/acpi.rs",
@@ -117,9 +122,14 @@
       "sha256": "43219b559cc84deba19d8d9ce9a9a6725017cef274e07fa1a5a6bc8eb63b9649"
     },
     {
+      "path": "src/arm64_stage1_tables.rs",
+      "bytes": 4481,
+      "sha256": "e311334631e47d53de5c3935ad49f5e936a36efbe28f28620b74d1f9ccb8ce87"
+    },
+    {
       "path": "src/boot_config.rs",
-      "bytes": 34425,
-      "sha256": "6d6fc16768f189821e2ced2ad14fee266d882d358937b60275b3d657563c2c40"
+      "bytes": 35777,
+      "sha256": "6fbd82c1178bcfd65c1aedcf8a1ee5db573e07a84e8a02b5248a033874ad74d9"
     },
     {
       "path": "src/boot_picker.rs",
@@ -188,8 +198,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 797,
-      "sha256": "cec1a15f0f36e9feb58b0324edac6d58675eafd98584939ed22a7f586cd725e5"
+      "bytes": 826,
+      "sha256": "a0e4cf6b9c392b3d1f4d820ef3095a31fa3c8f91acbba66cfe292e6e70dccf04"
     },
     {
       "path": "src/mach_o.rs",
@@ -262,9 +272,19 @@
       "sha256": "34254d872a9c3760422d2c741f62036d4fef939411ebf905150cd21befc67ffc"
     },
     {
+      "path": "tests/arm64_mapped_config.rs",
+      "bytes": 3704,
+      "sha256": "ef9bd709ae56a58b36f4e59d51a2432fc323c6eaec3f9055d17b8fc6dfb7959c"
+    },
+    {
       "path": "tests/arm64_platform_config.rs",
       "bytes": 10758,
       "sha256": "6adc66e59b459f85d6a0842fcbbdb7d3576726be4be99b95dc72a5825dd918c4"
+    },
+    {
+      "path": "tests/arm64_stage1_tables.rs",
+      "bytes": 3633,
+      "sha256": "73695fd6b5a66fe6f1dea079869aa60066a044603bf27e73393c8617c55ea1d6"
     },
     {
       "path": "tests/arm64_trace_video.rs",
