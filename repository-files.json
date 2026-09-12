@@ -47,6 +47,11 @@
       "sha256": "8bc33b983b4dec56fbd78d706821ea3d4d1fb5ae86bdaee72a5ce849ed9f1b83"
     },
     {
+      "path": "docs/LONG_TRACE.md",
+      "bytes": 1955,
+      "sha256": "201ca7c3378143210dfb7e13265d8ac416d4ddcdfcbc67a4f362cbb1a9fc6cab"
+    },
+    {
       "path": "docs/RUNTIME_DEVICE_TREE.md",
       "bytes": 2287,
       "sha256": "9df2ea38ba7514e5d49757836a9a20a6babe6a920919c7dcd0ea129fac5daf03"
@@ -94,7 +99,7 @@
     {
       "path": "repository.json",
       "bytes": 1405,
-      "sha256": "ebb1139d687b50a871ef7c58b217659217b260fea58450cbc9cd3f7dbb68da79"
+      "sha256": "68619338b5124a21794a8fcde46a44db74bb6d7f10191c34c49110997e050758"
     },
     {
       "path": "src/acpi.rs",
@@ -108,8 +113,8 @@
     },
     {
       "path": "src/boot_config.rs",
-      "bytes": 33066,
-      "sha256": "c3be0de09c388c36c12b4f4b589d1ec5c6e39a61956d8409fc44413d5971550e"
+      "bytes": 33788,
+      "sha256": "0fc770c64aedbec16a8497def2c1490afeefe87c343b70218a74bdee8c2f8380"
     },
     {
       "path": "src/boot_picker.rs",
@@ -240,6 +245,11 @@
       "path": "tests/arm64_kernel_collection.rs",
       "bytes": 11665,
       "sha256": "130bc4b732d0ac86084c5a83f39630ee155f4c030118f0749f2b0ea001964351"
+    },
+    {
+      "path": "tests/arm64_long_config.rs",
+      "bytes": 6265,
+      "sha256": "34254d872a9c3760422d2c741f62036d4fef939411ebf905150cd21befc67ffc"
     },
     {
       "path": "tests/arm64_platform_config.rs",
