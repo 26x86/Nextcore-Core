@@ -74,6 +74,20 @@ pub struct Arm64TraceConfiguration {
     pub device_tree_path: String,
     pub instruction_budget: u64,
     pub platform: Option<Arm64PlatformConfiguration>,
+    pub video: Option<Arm64TraceVideo>,
+    pub memory_profile: Option<Arm64TraceMemoryProfile>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Arm64TraceMemoryProfile {
+    /// Explicit software mapping; not an original-image entry ABI.
+    MappedNormalNcV1,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Arm64TraceVideo {
+    /// Request guest-owned framebuffer placement using the actual firmware GOP mode.
+    GopFramebuffer,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -385,7 +399,7 @@ pub fn parse_arm64_trace_configuration_with_limit(
     if !matches!(maximum_budget, 64 | 256 | 1024 | 4096) {
         return Err(BootConfigError::InvalidTraceConfiguration);
     }
-    parse_arm64_trace_with_policy(input, maximum_budget, false)
+    parse_arm64_trace_with_policy(input, maximum_budget, TraceTierCapability::Ordinary)
 }
 
 /// Separately selected diagnostic capability. Without DiagnosticTier, retain
@@ -394,13 +408,48 @@ pub fn parse_arm64_trace_configuration_with_limit(
 pub fn parse_arm64_trace_configuration_with_deep_tier(
     input: &[u8],
 ) -> Result<Arm64TraceConfiguration> {
-    parse_arm64_trace_with_policy(input, 4096, true)
+    parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Deep)
+}
+
+/// Explicit long diagnostic capability. The exact long-65536 selector requires
+/// budget 65536 and the named software profile. Deep selection remains valid;
+/// without a selector, the existing 4096 ceiling is retained.
+pub fn parse_arm64_trace_configuration_with_long_tier(
+    input: &[u8],
+) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Long)
+}
+
+/// Explicit initialization diagnostic; only initialization-67108864 selects
+/// budget 67108864 with the named software profile. Existing deep/long choices
+/// remain available, while omission retains the 4096 ceiling.
+pub fn parse_arm64_trace_configuration_with_initialization_tier(
+    input: &[u8],
+) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Initialization)
+}
+
+/// Caller must independently enable the mapped diagnostic build capability.
+/// Omission retains initialization-tier policy; all earlier parser APIs reject
+/// any MemoryProfile field, even the exact supported value.
+pub fn parse_arm64_trace_configuration_with_mapped_tier(
+    input: &[u8],
+) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Mapped)
+}
+
+enum TraceTierCapability {
+    Ordinary,
+    Deep,
+    Long,
+    Initialization,
+    Mapped,
 }
 
 fn parse_arm64_trace_with_policy(
     input: &[u8],
     maximum_budget: u64,
-    deep_capable: bool,
+    capability: TraceTierCapability,
 ) -> Result<Arm64TraceConfiguration> {
     if parse_arm64_kernel_target(input)?.profile != KernelProfile::X86EfiArm64Trace {
         return Err(BootConfigError::UnsupportedKernelProfile);
@@ -418,19 +467,36 @@ fn parse_arm64_trace_with_policy(
     let trace =
         dictionary_value(kernel, "Trace")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(trace, "dict")?;
-    let deep_selected = if let Some(tier) = dictionary_value(trace, "DiagnosticTier")? {
-        if !deep_capable {
+    let memory_profile = match dictionary_value(trace, "MemoryProfile")? {
+        None => None,
+        Some(node) => {
+            if !matches!(capability, TraceTierCapability::Mapped) {
+                return Err(BootConfigError::InvalidTraceConfiguration);
+            }
+            require_tag(node, "string")?;
+            if scalar_text(node)? != "mapped-normal-nc-v1" {
+                return Err(BootConfigError::InvalidTraceConfiguration);
+            }
+            Some(Arm64TraceMemoryProfile::MappedNormalNcV1)
+        }
+    };
+    let selected_budget = if let Some(tier) = dictionary_value(trace, "DiagnosticTier")? {
+        if matches!(capability, TraceTierCapability::Ordinary) {
             return Err(BootConfigError::InvalidTraceConfiguration);
         }
         require_tag(tier, "string")?;
-        if scalar_text(tier)? != "deep-16384" {
-            return Err(BootConfigError::InvalidTraceConfiguration);
+        match scalar_text(tier)?.as_str() {
+            "deep-16384" => Some(16384),
+            "long-65536" if matches!(capability,
+                TraceTierCapability::Long | TraceTierCapability::Initialization | TraceTierCapability::Mapped) => Some(65536),
+            "initialization-67108864" if matches!(capability,
+                TraceTierCapability::Initialization | TraceTierCapability::Mapped) => Some(67108864),
+            _ => return Err(BootConfigError::InvalidTraceConfiguration),
         }
-        true
     } else {
-        false
+        None
     };
-    let maximum_budget = if deep_selected { 16384 } else { maximum_budget };
+    let maximum_budget = selected_budget.unwrap_or(maximum_budget);
     let abi =
         dictionary_value(trace, "HandoffAbi")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(abi, "string")?;
@@ -454,6 +520,7 @@ fn parse_arm64_trace_with_policy(
         .ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(path, "string")?;
     let result = Arm64TraceConfiguration {
+        memory_profile,
         physical_base: number("PhysicalBase")?,
         virtual_base: number("VirtualBase")?,
         memory_size: number("MemorySize")?,
@@ -462,8 +529,19 @@ fn parse_arm64_trace_with_policy(
         device_tree_path: normalize_absolute_path(&scalar_text(path)?)?,
         instruction_budget: number("InstructionBudget")?,
         platform: parse_arm64_platform_configuration(trace)?,
+        video: match dictionary_value(trace, "Video")? {
+            None => None,
+            Some(node) => {
+                require_tag(node, "string")?;
+                if scalar_text(node)? != "gop-framebuffer" {
+                    return Err(BootConfigError::InvalidTraceConfiguration);
+                }
+                Some(Arm64TraceVideo::GopFramebuffer)
+            }
+        },
     };
     if result.memory_size < 16 * 1024 * 1024
+        || (result.memory_profile.is_some() && result.platform.is_none())
         || result.memory_size > 1024 * 1024 * 1024
         || result.memory_size % 16384 != 0
         || result.physical_base % 16384 != 0
@@ -482,11 +560,13 @@ fn parse_arm64_trace_with_policy(
         || result.kernel_phys < result.physical_base
         || result.kernel_phys >= result.physical_base + result.memory_size
         || result.instruction_budget == 0
-        || (deep_selected && (result.instruction_budget != 16384 || result.platform.is_none()))
+        || selected_budget.is_some_and(|budget| {
+            result.instruction_budget != budget || result.platform.is_none()
+        })
         || result.instruction_budget > if result.platform.is_some() { maximum_budget } else { 8 }
         || (result.instruction_budget > 64
             && !matches!(result.instruction_budget, 256 | 1024 | 4096)
-            && !(deep_selected && result.instruction_budget == 16384))
+            && selected_budget != Some(result.instruction_budget))
     {
         return Err(BootConfigError::InvalidTraceConfiguration);
     }

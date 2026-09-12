@@ -32,14 +32,34 @@
       "sha256": "d7ec3da6c39dcbcb8733c85016874e6f0cd982137c4f4c105a00ab71c9b45fa4"
     },
     {
+      "path": "docs/ARM64_STAGE1_TABLES.md",
+      "bytes": 2742,
+      "sha256": "7024983c1bebf8012aca9224160c11f4c4a79f781174eb05673f74a7876da725"
+    },
+    {
       "path": "docs/DEEP_ARM_TRACE.md",
       "bytes": 1611,
       "sha256": "a982580a0f6e45bb28673fc84b5e7cccc1e3818ce05d2d6c90ef8eb860d5195a"
     },
     {
+      "path": "docs/FRAMEBUFFER_HANDOFF.md",
+      "bytes": 3184,
+      "sha256": "8d81ac3990388181673025b8aca5ba078b1552c1e45b192c44c642756e9bf326"
+    },
+    {
       "path": "docs/GUEST_ALLOCATION_LEDGER.md",
       "bytes": 13694,
       "sha256": "8bc33b983b4dec56fbd78d706821ea3d4d1fb5ae86bdaee72a5ce849ed9f1b83"
+    },
+    {
+      "path": "docs/INITIALIZATION_TRACE.md",
+      "bytes": 1963,
+      "sha256": "8a7a93e400381a3d4ed2cc87b4d5b2e51c5e0695bb6db852d5a3c4492e3cca81"
+    },
+    {
+      "path": "docs/LONG_TRACE.md",
+      "bytes": 1955,
+      "sha256": "201ca7c3378143210dfb7e13265d8ac416d4ddcdfcbc67a4f362cbb1a9fc6cab"
     },
     {
       "path": "docs/RUNTIME_DEVICE_TREE.md",
@@ -50,6 +70,11 @@
       "path": "docs/TIERED_ARM_TRACE.md",
       "bytes": 820,
       "sha256": "7b4ac7b1720869e8b6aa88f2f7a7cb3beb41ca1db8706c47355fc7f865ff45d1"
+    },
+    {
+      "path": "docs/TRACE_VIDEO.md",
+      "bytes": 2964,
+      "sha256": "16d418ffdec983712f4bb6e633b9fa4521c8968c0c779f9b7e70d472f127f40c"
     },
     {
       "path": "docs/UEFI_HASH_BACKEND.md",
@@ -83,8 +108,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1391,
-      "sha256": "4b0e1d88a0352290d5cece27f14759a399cd4b9bd2f6efd8b6610c9f85c6a77e"
+      "bytes": 1405,
+      "sha256": "f01a95e30356f2f1506bd0540a13359809a41d2ca84396c30ca7290d450c6af6"
     },
     {
       "path": "src/acpi.rs",
@@ -97,9 +122,14 @@
       "sha256": "43219b559cc84deba19d8d9ce9a9a6725017cef274e07fa1a5a6bc8eb63b9649"
     },
     {
+      "path": "src/arm64_stage1_tables.rs",
+      "bytes": 4481,
+      "sha256": "e311334631e47d53de5c3935ad49f5e936a36efbe28f28620b74d1f9ccb8ce87"
+    },
+    {
       "path": "src/boot_config.rs",
-      "bytes": 32454,
-      "sha256": "b8355f5e37adb84558de81ce7d03ff0e7c727c49ee11263ccd1872a20764a016"
+      "bytes": 35777,
+      "sha256": "6fbd82c1178bcfd65c1aedcf8a1ee5db573e07a84e8a02b5248a033874ad74d9"
     },
     {
       "path": "src/boot_picker.rs",
@@ -168,8 +198,8 @@
     },
     {
       "path": "src/lib.rs",
-      "bytes": 797,
-      "sha256": "cec1a15f0f36e9feb58b0324edac6d58675eafd98584939ed22a7f586cd725e5"
+      "bytes": 826,
+      "sha256": "a0e4cf6b9c392b3d1f4d820ef3095a31fa3c8f91acbba66cfe292e6e70dccf04"
     },
     {
       "path": "src/mach_o.rs",
@@ -193,8 +223,8 @@
     },
     {
       "path": "src/xnu_arm64_handoff.rs",
-      "bytes": 8607,
-      "sha256": "50132d9535955ff61f5b763bfd0296e1ef98d998b09f73ccadbce34b45801051"
+      "bytes": 11626,
+      "sha256": "fe0b0af4c8bd7fe904509a16f87ca12e7ebe5be7d1b18daa2ba218a211634e88"
     },
     {
       "path": "src/xnu_boot_args.rs",
@@ -223,8 +253,13 @@
     },
     {
       "path": "tests/arm64_handoff.rs",
-      "bytes": 6262,
-      "sha256": "f18d7468558d5f78b6817e33e432ab4133d1b92881d356ea742bc7e7048b0a1d"
+      "bytes": 12982,
+      "sha256": "2af6a4be190f06a0d30ea813c98291264f9eb7c2cea63f7870f6de95eaeea49c"
+    },
+    {
+      "path": "tests/arm64_initialization_config.rs",
+      "bytes": 6860,
+      "sha256": "a81ad3983556d3fd4ea8d07e78bf11b53518b96056d217b3a8ce32c7bd13254c"
     },
     {
       "path": "tests/arm64_kernel_collection.rs",
@@ -232,9 +267,29 @@
       "sha256": "130bc4b732d0ac86084c5a83f39630ee155f4c030118f0749f2b0ea001964351"
     },
     {
+      "path": "tests/arm64_long_config.rs",
+      "bytes": 6265,
+      "sha256": "34254d872a9c3760422d2c741f62036d4fef939411ebf905150cd21befc67ffc"
+    },
+    {
+      "path": "tests/arm64_mapped_config.rs",
+      "bytes": 3704,
+      "sha256": "ef9bd709ae56a58b36f4e59d51a2432fc323c6eaec3f9055d17b8fc6dfb7959c"
+    },
+    {
       "path": "tests/arm64_platform_config.rs",
       "bytes": 10758,
       "sha256": "6adc66e59b459f85d6a0842fcbbdb7d3576726be4be99b95dc72a5825dd918c4"
+    },
+    {
+      "path": "tests/arm64_stage1_tables.rs",
+      "bytes": 3633,
+      "sha256": "73695fd6b5a66fe6f1dea079869aa60066a044603bf27e73393c8617c55ea1d6"
+    },
+    {
+      "path": "tests/arm64_trace_video.rs",
+      "bytes": 3264,
+      "sha256": "2b1966dfa90e2749ced037b05d9fb3792cb74e1ddc022affb3d3df76d46ecff7"
     },
     {
       "path": "tests/boot_config.rs",
