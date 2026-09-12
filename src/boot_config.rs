@@ -74,6 +74,13 @@ pub struct Arm64TraceConfiguration {
     pub device_tree_path: String,
     pub instruction_budget: u64,
     pub platform: Option<Arm64PlatformConfiguration>,
+    pub video: Option<Arm64TraceVideo>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Arm64TraceVideo {
+    /// Request guest-owned framebuffer placement using the actual firmware GOP mode.
+    GopFramebuffer,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -462,6 +469,16 @@ fn parse_arm64_trace_with_policy(
         device_tree_path: normalize_absolute_path(&scalar_text(path)?)?,
         instruction_budget: number("InstructionBudget")?,
         platform: parse_arm64_platform_configuration(trace)?,
+        video: match dictionary_value(trace, "Video")? {
+            None => None,
+            Some(node) => {
+                require_tag(node, "string")?;
+                if scalar_text(node)? != "gop-framebuffer" {
+                    return Err(BootConfigError::InvalidTraceConfiguration);
+                }
+                Some(Arm64TraceVideo::GopFramebuffer)
+            }
+        },
     };
     if result.memory_size < 16 * 1024 * 1024
         || result.memory_size > 1024 * 1024 * 1024
