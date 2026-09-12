@@ -75,6 +75,13 @@ pub struct Arm64TraceConfiguration {
     pub instruction_budget: u64,
     pub platform: Option<Arm64PlatformConfiguration>,
     pub video: Option<Arm64TraceVideo>,
+    pub memory_profile: Option<Arm64TraceMemoryProfile>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Arm64TraceMemoryProfile {
+    /// Explicit software mapping; not an original-image entry ABI.
+    MappedNormalNcV1,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -422,11 +429,21 @@ pub fn parse_arm64_trace_configuration_with_initialization_tier(
     parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Initialization)
 }
 
+/// Caller must independently enable the mapped diagnostic build capability.
+/// Omission retains initialization-tier policy; all earlier parser APIs reject
+/// any MemoryProfile field, even the exact supported value.
+pub fn parse_arm64_trace_configuration_with_mapped_tier(
+    input: &[u8],
+) -> Result<Arm64TraceConfiguration> {
+    parse_arm64_trace_with_policy(input, 4096, TraceTierCapability::Mapped)
+}
+
 enum TraceTierCapability {
     Ordinary,
     Deep,
     Long,
     Initialization,
+    Mapped,
 }
 
 fn parse_arm64_trace_with_policy(
@@ -450,6 +467,19 @@ fn parse_arm64_trace_with_policy(
     let trace =
         dictionary_value(kernel, "Trace")?.ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(trace, "dict")?;
+    let memory_profile = match dictionary_value(trace, "MemoryProfile")? {
+        None => None,
+        Some(node) => {
+            if !matches!(capability, TraceTierCapability::Mapped) {
+                return Err(BootConfigError::InvalidTraceConfiguration);
+            }
+            require_tag(node, "string")?;
+            if scalar_text(node)? != "mapped-normal-nc-v1" {
+                return Err(BootConfigError::InvalidTraceConfiguration);
+            }
+            Some(Arm64TraceMemoryProfile::MappedNormalNcV1)
+        }
+    };
     let selected_budget = if let Some(tier) = dictionary_value(trace, "DiagnosticTier")? {
         if matches!(capability, TraceTierCapability::Ordinary) {
             return Err(BootConfigError::InvalidTraceConfiguration);
@@ -458,9 +488,9 @@ fn parse_arm64_trace_with_policy(
         match scalar_text(tier)?.as_str() {
             "deep-16384" => Some(16384),
             "long-65536" if matches!(capability,
-                TraceTierCapability::Long | TraceTierCapability::Initialization) => Some(65536),
+                TraceTierCapability::Long | TraceTierCapability::Initialization | TraceTierCapability::Mapped) => Some(65536),
             "initialization-67108864" if matches!(capability,
-                TraceTierCapability::Initialization) => Some(67108864),
+                TraceTierCapability::Initialization | TraceTierCapability::Mapped) => Some(67108864),
             _ => return Err(BootConfigError::InvalidTraceConfiguration),
         }
     } else {
@@ -490,6 +520,7 @@ fn parse_arm64_trace_with_policy(
         .ok_or(BootConfigError::InvalidTraceConfiguration)?;
     require_tag(path, "string")?;
     let result = Arm64TraceConfiguration {
+        memory_profile,
         physical_base: number("PhysicalBase")?,
         virtual_base: number("VirtualBase")?,
         memory_size: number("MemorySize")?,
@@ -510,6 +541,7 @@ fn parse_arm64_trace_with_policy(
         },
     };
     if result.memory_size < 16 * 1024 * 1024
+        || (result.memory_profile.is_some() && result.platform.is_none())
         || result.memory_size > 1024 * 1024 * 1024
         || result.memory_size % 16384 != 0
         || result.physical_base % 16384 != 0

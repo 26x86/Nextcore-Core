@@ -5,6 +5,7 @@ extern crate alloc;
 #[cfg(feature = "std")]
 pub mod acpi;
 pub mod apfs_jumpstart;
+pub mod arm64_stage1_tables;
 pub mod boot_config;
 pub mod boot_picker;
 #[cfg(feature = "std")]
