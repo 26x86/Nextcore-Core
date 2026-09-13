@@ -13,6 +13,23 @@ pub const MAX_DEVICE_TREE_BYTES: usize = 1024 * 1024;
 pub const ARM_BOOT_STACK_BYTES: u64 = 64 * 1024;
 pub const ARM_BOOTSTRAP_BLOCK_BYTES: u64 = 32 * 1024 * 1024;
 
+/// Little-endian XRGB8888 geometry, including any padding at the end of a row.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Arm64FramebufferGeometry {
+    pub width: u32,
+    pub height: u32,
+    pub row_bytes: u32,
+}
+
+/// Owned guest storage, not a firmware framebuffer address or display receipt.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Arm64FramebufferLayout {
+    pub base_phys: u64,
+    pub byte_len: u64,
+    pub reserved_bytes: u64,
+    pub geometry: Arm64FramebufferGeometry,
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct Arm64PlacementInput<'a> {
     pub physical_base: u64,
@@ -50,6 +67,8 @@ pub enum Arm64HandoffError {
     AddressOverflow,
     DestinationSize,
     ReadbackMismatch,
+    InvalidFramebufferGeometry,
+    ConflictingVideo,
 }
 impl fmt::Display for Arm64HandoffError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -66,9 +85,43 @@ pub struct Arm64HandoffPlan<'a> {
     layout: Arm64HandoffLayout,
     boot_args: Arm64BootArgsEncoding,
     device_tree: &'a [u8],
+    framebuffer: Option<Arm64FramebufferLayout>,
 }
 impl<'a> Arm64HandoffPlan<'a> {
     pub fn new(source: &'a [u8], input: Arm64PlacementInput<'a>) -> Result<Self> {
+        Self::build(source, input, None)
+    }
+
+    /// Reserve zeroed, page-rounded XRGB8888 storage after the boot stack.
+    /// See docs/FRAMEBUFFER_HANDOFF.md. Input video must be zero; the owned
+    /// allocation supplies its physical base and all encoded video fields.
+    pub fn new_with_framebuffer(
+        source: &'a [u8],
+        input: Arm64PlacementInput<'a>,
+        geometry: Arm64FramebufferGeometry,
+    ) -> Result<Self> {
+        if input.video != Arm64BootVideo::default() {
+            return Err(E::ConflictingVideo);
+        }
+        let minimum_row = geometry
+            .width
+            .checked_mul(4)
+            .ok_or(E::InvalidFramebufferGeometry)?;
+        if geometry.width == 0
+            || geometry.height == 0
+            || geometry.row_bytes < minimum_row
+            || geometry.row_bytes % 4 != 0
+        {
+            return Err(E::InvalidFramebufferGeometry);
+        }
+        Self::build(source, input, Some(geometry))
+    }
+
+    fn build(
+        source: &'a [u8],
+        mut input: Arm64PlacementInput<'a>,
+        geometry: Option<Arm64FramebufferGeometry>,
+    ) -> Result<Self> {
         if input.device_tree.is_empty() || input.device_tree.len() > MAX_DEVICE_TREE_BYTES {
             return Err(E::DeviceTreeTooLarge);
         }
@@ -106,9 +159,38 @@ impl<'a> Arm64HandoffPlan<'a> {
                 .checked_add(input.device_tree.len() as u64)
                 .ok_or(E::AddressOverflow)?,
         )?;
-        let occupied_end = stack_base
+        let stack_top_phys = stack_base
             .checked_add(ARM_BOOT_STACK_BYTES)
             .ok_or(E::AddressOverflow)?;
+        let framebuffer = geometry
+            .map(|geometry| {
+                let byte_len = u64::from(geometry.row_bytes)
+                    .checked_mul(u64::from(geometry.height))
+                    .ok_or(E::AddressOverflow)?;
+                Ok(Arm64FramebufferLayout {
+                    base_phys: stack_top_phys,
+                    byte_len,
+                    reserved_bytes: align_up(byte_len)?,
+                    geometry,
+                })
+            })
+            .transpose()?;
+        let occupied_end = if let Some(framebuffer) = framebuffer {
+            input.video = Arm64BootVideo {
+                base_address: framebuffer.base_phys,
+                display: 1,
+                row_bytes: u64::from(framebuffer.geometry.row_bytes),
+                width: u64::from(framebuffer.geometry.width),
+                height: u64::from(framebuffer.geometry.height),
+                depth: 32,
+            };
+            framebuffer
+                .base_phys
+                .checked_add(framebuffer.reserved_bytes)
+                .ok_or(E::AddressOverflow)?
+        } else {
+            stack_top_phys
+        };
         let allocation_bytes = usize::try_from(
             occupied_end
                 .checked_sub(input.kernel_phys)
@@ -131,7 +213,7 @@ impl<'a> Arm64HandoffPlan<'a> {
                 .ok_or(E::AddressOverflow)?,
             boot_args_phys,
             device_tree_phys,
-            stack_top_phys: occupied_end,
+            stack_top_phys,
             occupied_end,
             allocation_bytes,
         };
@@ -157,6 +239,7 @@ impl<'a> Arm64HandoffPlan<'a> {
             layout,
             boot_args,
             device_tree: input.device_tree,
+            framebuffer,
         })
     }
     pub fn layout(&self) -> &Arm64HandoffLayout {
@@ -167,6 +250,10 @@ impl<'a> Arm64HandoffPlan<'a> {
     }
     pub fn boot_args(&self) -> &Arm64BootArgsEncoding {
         &self.boot_args
+    }
+
+    pub fn framebuffer(&self) -> Option<&Arm64FramebufferLayout> {
+        self.framebuffer.as_ref()
     }
     pub const fn execution_ready(&self) -> bool {
         false
