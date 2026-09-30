@@ -1,6 +1,6 @@
 //! Entirely authored Mach-O layout and sentinel bytes, independent of any OS.
 use nextcore_core::{
-    kc_staging::{KcStagingError as E, KcStagingPlan, MAX_STAGING_SIZE},
+    kc_staging::{KcStagingError as E, KcStagingPhase, KcStagingPlan, MAX_STAGING_SIZE},
     kernel_collection::{EntryMetadata, KcMetadataError, PreparationRequirement},
 };
 
@@ -135,7 +135,57 @@ fn actual_copy_zero_holes_and_shared_views_match_independent_layout() {
     );
     assert_eq!(verified.member_headers_checked, 2);
     assert_eq!(verified.member_segment_views_checked, 4);
+    // Header bytes overlap their owning segments; the shared linkedit views overlap.
+    assert_eq!(verified.member_file_bytes_compared, 0x700);
+    let declared_member_file_bytes: u64 = staged
+        .plan()
+        .inspection()
+        .members
+        .iter()
+        .map(|member| {
+            32 + u64::from(member.image.command_bytes)
+                + member
+                    .image
+                    .segments
+                    .iter()
+                    .map(|segment| segment.file.size)
+                    .sum::<u64>()
+        })
+        .sum();
+    assert_eq!(declared_member_file_bytes, 0xa18);
+    assert!(
+        u64::try_from(verified.member_file_bytes_compared).unwrap() < declared_member_file_bytes
+    );
     assert_eq!(source, before);
+}
+
+#[test]
+fn observed_collection_stage_preserves_readback_and_size_rejection() {
+    let source = fixture();
+    let plan = KcStagingPlan::new(&source).unwrap();
+    let mut destination = vec![0xa5; plan.arena_size()];
+    let mut phases = Vec::new();
+    let short = destination.len() - 1;
+    assert_eq!(
+        plan.stage_into_observed(&mut destination[..short], |phase| phases.push(phase)),
+        Err(E::DestinationSize)
+    );
+    assert!(phases.is_empty());
+    assert!(destination.iter().all(|byte| *byte == 0xa5));
+    let verification = plan
+        .stage_into_observed(&mut destination, |phase| phases.push(phase))
+        .unwrap();
+    assert_eq!(
+        phases,
+        [
+            KcStagingPhase::DestinationInitialized,
+            KcStagingPhase::SegmentsCopied,
+            KcStagingPhase::ArenaVerified,
+            KcStagingPhase::MemberViewsVerified,
+        ]
+    );
+    assert_eq!(verification, plan.verify(&destination).unwrap());
+    assert_eq!(verification.member_file_bytes_compared, 0x700);
 }
 
 #[test]
@@ -236,6 +286,33 @@ fn readback_detects_payload_zero_tail_hole_page_tail_and_member_corruption() {
 }
 
 #[test]
+fn outer_readback_rejects_shared_member_corruption_before_completion_markers() {
+    let source = fixture();
+    let before = source.clone();
+    let plan = KcStagingPlan::new(&source).unwrap();
+    let mut destination = vec![0; plan.arena_size()];
+    plan.stage_into(&mut destination).unwrap();
+    for offset in [0x4600, 0x7103] {
+        destination[offset] ^= 0x80;
+        let mut phases = Vec::new();
+        assert_eq!(
+            plan.verify_observed(&destination, |phase| phases.push(phase)),
+            Err(E::ReadbackMismatch),
+            "offset {offset:#x}"
+        );
+        assert!(phases.is_empty(), "outer readback was not completed");
+        destination[offset] ^= 0x80;
+    }
+    assert_eq!(
+        plan.verify(&destination)
+            .unwrap()
+            .member_file_bytes_compared,
+        0x700
+    );
+    assert_eq!(source, before);
+}
+
+#[test]
 fn sparse_virtual_span_is_bounded_independently_of_file_size() {
     let mut source = fixture();
     let high = BASE + MAX_STAGING_SIZE as u64 + 0x10000;
@@ -300,6 +377,18 @@ fn wrong_member_mapping_and_truncated_source_cannot_be_staged() {
     assert!(matches!(
         KcStagingPlan::new(&source[..0x3080]),
         Err(E::Metadata(_))
+    ));
+}
+
+#[test]
+fn conflicting_member_source_displacement_is_rejected() {
+    let mut source = fixture();
+    // The second member's file-backed text range still lies in the source,
+    // but its byte-to-byte displacement no longer matches its outer owner.
+    put64(&mut source, 0x1600 + 32 + 40, 0x1601);
+    assert!(matches!(
+        KcStagingPlan::new(&source),
+        Err(E::InvalidMapping | E::Metadata(_))
     ));
 }
 

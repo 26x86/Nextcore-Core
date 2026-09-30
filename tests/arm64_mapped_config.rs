@@ -77,6 +77,74 @@ fn exact_selection_requires_platform_and_retains_tier_contracts() {
 }
 
 #[test]
+fn transition_tier_is_mapped_only_and_exact() {
+    let selector = "<key>DiagnosticTier</key><string>transition-1048576</string>";
+    let extra = format!("{PLATFORM}{MEMORY}{selector}");
+    let exact = input(&extra, 1048576);
+    assert_eq!(
+        parse_arm64_trace_configuration_with_mapped_tier(&exact)
+            .unwrap()
+            .instruction_budget,
+        1048576
+    );
+    assert!(parse_arm64_trace_configuration_with_mapped_tier(&input(&extra, 1048575)).is_err());
+    assert!(parse_arm64_trace_configuration_with_initialization_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration_with_long_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration_with_deep_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration(&exact).is_err());
+    let missing_memory = input(&format!("{PLATFORM}{selector}"), 1048576);
+    assert!(parse_arm64_trace_configuration_with_mapped_tier(&missing_memory).is_err());
+    assert!(parse_arm64_trace_configuration_with_initialization_tier(&missing_memory).is_err());
+    assert!(parse_arm64_trace_configuration_with_long_tier(&missing_memory).is_err());
+    assert!(parse_arm64_trace_configuration_with_deep_tier(&missing_memory).is_err());
+    assert!(parse_arm64_trace_configuration(&missing_memory).is_err());
+}
+
+#[test]
+fn boundary_tier_is_mapped_only_and_exact() {
+    let selector = "<key>DiagnosticTier</key><string>boundary-1114112</string>";
+    let extra = format!("{PLATFORM}{MEMORY}{selector}");
+    let exact = input(&extra, 1114112);
+    assert_eq!(
+        parse_arm64_trace_configuration_with_mapped_tier(&exact)
+            .unwrap()
+            .instruction_budget,
+        1114112
+    );
+    assert!(parse_arm64_trace_configuration_with_mapped_tier(&input(&extra, 1114111)).is_err());
+    assert!(parse_arm64_trace_configuration_with_initialization_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration_with_long_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration_with_deep_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration(&exact).is_err());
+    let missing_memory = input(&format!("{PLATFORM}{selector}"), 1114112);
+    assert!(parse_arm64_trace_configuration_with_mapped_tier(&missing_memory).is_err());
+}
+
+#[test]
+fn helper_span_tier_is_mapped_only_and_exact() {
+    let selector = "<key>DiagnosticTier</key><string>helper-span-44040192</string>";
+    let extra = format!("{PLATFORM}{MEMORY}{selector}");
+    let exact = input(&extra, 44040192);
+    assert_eq!(
+        parse_arm64_trace_configuration_with_mapped_tier(&exact)
+            .unwrap()
+            .instruction_budget,
+        44040192
+    );
+    for budget in [44040191, 44040193] {
+        assert!(parse_arm64_trace_configuration_with_mapped_tier(&input(&extra, budget)).is_err());
+    }
+    assert!(parse_arm64_trace_configuration_with_initialization_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration_with_long_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration_with_deep_tier(&exact).is_err());
+    assert!(parse_arm64_trace_configuration(&exact).is_err());
+    let missing_memory = input(&format!("{PLATFORM}{selector}"), 44040192);
+    assert!(parse_arm64_trace_configuration_with_mapped_tier(&missing_memory).is_err());
+    let missing_platform = input(&format!("{MEMORY}{selector}"), 44040192);
+    assert!(parse_arm64_trace_configuration_with_mapped_tier(&missing_platform).is_err());
+}
+
+#[test]
 fn omission_preserves_initialization_policy() {
     for platform in ["", PLATFORM] {
         for budget in [8, 9, 64, 256, 4096, 16384, 65536, 67108864] {

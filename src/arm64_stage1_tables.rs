@@ -5,6 +5,7 @@ use alloc::vec::Vec;
 pub const PAGE_SIZE: u64 = 16 * 1024;
 pub const MAX_MEMORY_SIZE: u64 = 1024 * 1024 * 1024;
 pub const MAX_TABLE_BYTES: usize = 2 * 1024 * 1024;
+pub const MAX_ALIAS_BYTES: u64 = 128 * 1024 * 1024;
 const LOW_END: u64 = 1 << 47;
 const HIGH_START: u64 = 0xffff_8000_0000_0000;
 const PA_END: u64 = 1 << 48;
@@ -19,6 +20,14 @@ pub enum Error {
     TableCapacity,
     Allocation,
     UnmappedAddress,
+    OverlappingRange,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Stage1Alias {
+    pub virtual_base: u64,
+    pub physical_base: u64,
+    pub bytes: u64,
 }
 
 #[derive(Debug)]
@@ -61,6 +70,67 @@ impl Arm64Stage1Tables {
             let pa = physical_base + offset;
             result.map_page(0, pa, pa)?;
             result.map_page(PAGE_SIZE as usize, virtual_base + offset, pa)?;
+        }
+        Ok(result)
+    }
+
+    /// Add at most two disjoint linked aliases to an otherwise immutable
+    /// research table set. An error discards the entire uninstalled table set.
+    pub fn new_with_aliases(
+        physical_base: u64,
+        virtual_base: u64,
+        memory_size: u64,
+        aliases: &[Stage1Alias],
+    ) -> Result<Self, Error> {
+        if aliases.len() > 2 {
+            return Err(Error::InvalidRange);
+        }
+        let physical_end = physical_base
+            .checked_add(memory_size)
+            .ok_or(Error::AddressOverflow)?;
+        let linear_end = virtual_base
+            .checked_add(memory_size)
+            .ok_or(Error::AddressOverflow)?;
+        for (index, alias) in aliases.iter().enumerate() {
+            if (alias.virtual_base | alias.physical_base | alias.bytes) & (PAGE_SIZE - 1) != 0 {
+                return Err(Error::Alignment);
+            }
+            if alias.bytes == 0 || alias.bytes > MAX_ALIAS_BYTES || alias.virtual_base < HIGH_START {
+                return Err(Error::InvalidRange);
+            }
+            let alias_end = alias
+                .virtual_base
+                .checked_add(alias.bytes)
+                .ok_or(Error::AddressOverflow)?;
+            let alias_physical_end = alias
+                .physical_base
+                .checked_add(alias.bytes)
+                .ok_or(Error::AddressOverflow)?;
+            if alias.physical_base < physical_base || alias_physical_end > physical_end {
+                return Err(Error::InvalidRange);
+            }
+            if ranges_overlap(alias.virtual_base, alias_end, virtual_base, linear_end)
+                || aliases[..index].iter().any(|other| {
+                    ranges_overlap(
+                        alias.virtual_base,
+                        alias_end,
+                        other.virtual_base,
+                        other.virtual_base + other.bytes,
+                    )
+                })
+            {
+                return Err(Error::OverlappingRange);
+            }
+        }
+        let mut result = Self::new(physical_base, virtual_base, memory_size)?;
+        for alias in aliases {
+            for offset in (0..alias.bytes).step_by(PAGE_SIZE as usize) {
+                result.map_page(
+                    PAGE_SIZE as usize,
+                    alias.virtual_base + offset,
+                    alias.physical_base + offset,
+                )?;
+            }
         }
         Ok(result)
     }
@@ -130,7 +200,14 @@ impl Arm64Stage1Tables {
             };
         }
         let slot = table + (((va >> 14) & 0x7ff) as usize) * 8;
+        if self.bytes[slot..slot + 8].iter().any(|&byte| byte != 0) {
+            return Err(Error::OverlappingRange);
+        }
         self.bytes[slot..slot + 8].copy_from_slice(&(pa | 0x403).to_le_bytes());
         Ok(())
     }
+}
+
+fn ranges_overlap(a_start: u64, a_end: u64, b_start: u64, b_end: u64) -> bool {
+    a_start < b_end && b_start < a_end
 }

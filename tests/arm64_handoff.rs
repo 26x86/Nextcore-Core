@@ -2,8 +2,8 @@ use nextcore_core::{
     flat_dt::{self, FlatNode, FlatProperty},
     xnu_arm64_boot_args::Arm64BootVideo,
     xnu_arm64_handoff::{
-        Arm64FramebufferGeometry as Geometry, Arm64HandoffError as E, Arm64HandoffPlan,
-        Arm64PlacementInput,
+        Arm64FramebufferGeometry as Geometry, Arm64HandoffError as E, Arm64HandoffPhase,
+        Arm64HandoffPlan, Arm64PlacementInput,
     },
 };
 const PAGE: usize = 16384;
@@ -138,6 +138,35 @@ fn physical_layout_stage_and_wire_coordinates_agree() {
     assert!(guest[5 * PAGE..].iter().all(|b| *b == 0));
     assert_eq!(source, before);
     assert!(!plan.execution_ready());
+}
+#[test]
+fn observed_stage_reports_only_completed_readbacks() {
+    let source = fixture();
+    let dt = dt();
+    let plan = Arm64HandoffPlan::new(&source, input(&dt)).unwrap();
+    let mut guest = vec![0xa5; plan.layout().allocation_bytes];
+    let mut phases = Vec::new();
+    let short = guest.len() - 1;
+    assert_eq!(
+        plan.stage_into_observed(&mut guest[..short], |phase| phases.push(phase)),
+        Err(E::DestinationSize)
+    );
+    assert!(phases.is_empty());
+    plan.stage_into_observed(&mut guest, |phase| phases.push(phase))
+        .unwrap();
+    assert_eq!(
+        phases,
+        [
+            Arm64HandoffPhase::DestinationInitialized,
+            Arm64HandoffPhase::CollectionInitialized,
+            Arm64HandoffPhase::CollectionSegmentsCopied,
+            Arm64HandoffPhase::CollectionArenaVerified,
+            Arm64HandoffPhase::CollectionMemberViewsVerified,
+            Arm64HandoffPhase::CollectionVerified,
+            Arm64HandoffPhase::TailVerified,
+        ]
+    );
+    assert!(plan.verify(&guest).is_ok());
 }
 #[test]
 fn modified_code_arguments_tree_padding_and_stack_are_detected() {
