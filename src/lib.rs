@@ -5,6 +5,7 @@ extern crate alloc;
 #[cfg(feature = "std")]
 pub mod acpi;
 pub mod apfs_jumpstart;
+pub mod arm64_startup_image;
 pub mod arm64_stage1_tables;
 pub mod boot_config;
 pub mod boot_picker;
@@ -17,6 +18,7 @@ pub mod error;
 pub mod flat_dt;
 pub mod firmware_dt;
 pub mod runtime_dt;
+pub mod selected_boot_input;
 pub mod guest_memory;
 #[cfg(feature = "std")]
 pub mod handoff;
@@ -32,6 +34,7 @@ pub mod macho_image;
 pub mod xnu_boot_args;
 pub mod xnu_arm64_boot_args;
 pub mod xnu_arm64_handoff;
+pub mod xnu_arm64_backing;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 

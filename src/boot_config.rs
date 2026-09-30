@@ -487,10 +487,42 @@ fn parse_arm64_trace_with_policy(
         require_tag(tier, "string")?;
         match scalar_text(tier)?.as_str() {
             "deep-16384" => Some(16384),
-            "long-65536" if matches!(capability,
-                TraceTierCapability::Long | TraceTierCapability::Initialization | TraceTierCapability::Mapped) => Some(65536),
-            "initialization-67108864" if matches!(capability,
-                TraceTierCapability::Initialization | TraceTierCapability::Mapped) => Some(67108864),
+            "long-65536"
+                if matches!(
+                    capability,
+                    TraceTierCapability::Long
+                        | TraceTierCapability::Initialization
+                        | TraceTierCapability::Mapped
+                ) =>
+            {
+                Some(65536)
+            }
+            "transition-1048576"
+                if matches!(capability, TraceTierCapability::Mapped)
+                    && memory_profile.is_some() =>
+            {
+                Some(1048576)
+            }
+            "boundary-1114112"
+                if matches!(capability, TraceTierCapability::Mapped)
+                    && memory_profile.is_some() =>
+            {
+                Some(1114112)
+            }
+            "helper-span-44040192"
+                if matches!(capability, TraceTierCapability::Mapped)
+                    && memory_profile.is_some() =>
+            {
+                Some(44040192)
+            }
+            "initialization-67108864"
+                if matches!(
+                    capability,
+                    TraceTierCapability::Initialization | TraceTierCapability::Mapped
+                ) =>
+            {
+                Some(67108864)
+            }
             _ => return Err(BootConfigError::InvalidTraceConfiguration),
         }
     } else {
@@ -560,10 +592,14 @@ fn parse_arm64_trace_with_policy(
         || result.kernel_phys < result.physical_base
         || result.kernel_phys >= result.physical_base + result.memory_size
         || result.instruction_budget == 0
-        || selected_budget.is_some_and(|budget| {
-            result.instruction_budget != budget || result.platform.is_none()
-        })
-        || result.instruction_budget > if result.platform.is_some() { maximum_budget } else { 8 }
+        || selected_budget
+            .is_some_and(|budget| result.instruction_budget != budget || result.platform.is_none())
+        || result.instruction_budget
+            > if result.platform.is_some() {
+                maximum_budget
+            } else {
+                8
+            }
         || (result.instruction_budget > 64
             && !matches!(result.instruction_budget, 256 | 1024 | 4096)
             && selected_budget != Some(result.instruction_budget))

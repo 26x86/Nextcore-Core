@@ -1,7 +1,7 @@
 //! Physical placement/encoding for the explicit ARM64 UEFI staging path.
 //! This prepares bytes; it supplies no trust, CPU, device or execution approval.
 use crate::{
-    kc_staging::{KcStagingError, KcStagingPlan, StagingVerification},
+    kc_staging::{KcStagingError, KcStagingPhase, KcStagingPlan, StagingVerification},
     xnu_arm64_boot_args::{
         encode_arm64_boot_args, Arm64BootArgsEncoding, Arm64BootArgsError, Arm64BootArgsInput,
         Arm64BootVideo, VMAPPLE_PAGE_SIZE,
@@ -55,6 +55,18 @@ pub struct Arm64HandoffLayout {
     pub stack_top_phys: u64,
     pub occupied_end: u64,
     pub allocation_bytes: usize,
+}
+
+/// Completed readback phases for an explicitly observed handoff stage.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Arm64HandoffPhase {
+    DestinationInitialized,
+    CollectionInitialized,
+    CollectionSegmentsCopied,
+    CollectionArenaVerified,
+    CollectionMemberViewsVerified,
+    CollectionVerified,
+    TailVerified,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -262,20 +274,45 @@ impl<'a> Arm64HandoffPlan<'a> {
     /// Initialize and fully read back the allocation. No pointers or PAC words
     /// are relocated: KC fixup ownership remains with its target consumer.
     pub fn stage_into(&self, destination: &mut [u8]) -> Result<StagingVerification> {
+        self.stage_into_observed(destination, |_| {})
+    }
+
+    /// Report only successfully completed phases; observation grants no entry authority.
+    pub fn stage_into_observed(
+        &self,
+        destination: &mut [u8],
+        mut observe: impl FnMut(Arm64HandoffPhase),
+    ) -> Result<StagingVerification> {
         if destination.len() != self.layout.allocation_bytes {
             return Err(E::DestinationSize);
         }
         destination.fill(0);
+        observe(Arm64HandoffPhase::DestinationInitialized);
         let verification = self
             .staging
-            .stage_into(&mut destination[..self.layout.kernel_bytes])
+            .stage_into_observed(&mut destination[..self.layout.kernel_bytes], |phase| {
+                observe(match phase {
+                    KcStagingPhase::DestinationInitialized => {
+                        Arm64HandoffPhase::CollectionInitialized
+                    }
+                    KcStagingPhase::SegmentsCopied => Arm64HandoffPhase::CollectionSegmentsCopied,
+                    KcStagingPhase::ArenaVerified => Arm64HandoffPhase::CollectionArenaVerified,
+                    KcStagingPhase::MemberViewsVerified => {
+                        Arm64HandoffPhase::CollectionMemberViewsVerified
+                    }
+                });
+            })
             .map_err(E::Staging)?;
+        observe(Arm64HandoffPhase::CollectionVerified);
         let args = (self.layout.boot_args_phys - self.layout.kernel_phys) as usize;
         let dt = (self.layout.device_tree_phys - self.layout.kernel_phys) as usize;
         destination[args..args + self.boot_args.as_bytes().len()]
             .copy_from_slice(self.boot_args.as_bytes());
         destination[dt..dt + self.device_tree.len()].copy_from_slice(self.device_tree);
-        self.verify(destination)?;
+        // The staging call already read back the complete collection. Recheck
+        // only the newly written arguments, tree and reserved tail here.
+        self.verify_tail(destination)?;
+        observe(Arm64HandoffPhase::TailVerified);
         Ok(verification)
     }
 
@@ -286,6 +323,10 @@ impl<'a> Arm64HandoffPlan<'a> {
         self.staging
             .verify(&destination[..self.layout.kernel_bytes])
             .map_err(E::Staging)?;
+        self.verify_tail(destination)
+    }
+
+    fn verify_tail(&self, destination: &[u8]) -> Result<()> {
         let args = (self.layout.boot_args_phys - self.layout.kernel_phys) as usize;
         let dt = (self.layout.device_tree_phys - self.layout.kernel_phys) as usize;
         for (offset, byte) in destination

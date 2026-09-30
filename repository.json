@@ -1,18 +1,11 @@
 {
-  "schema": "26x86.repository/2",
+  "schema": "26x86.repository/3",
   "name": "Nextcore-Core",
   "owner": "26x86",
   "public": true,
   "role": "nextcore-module",
   "crate": "nextcore-core",
-  "description": "Public boot configuration and bounded format codecs, including APFS Jumpstart extraction.",
-  "development": {
-    "branch": "codex/framebuffer-handoff-20260912",
-    "base_commit": "6547be4bbf6b75cf706b89ade4d4a60d5441d223",
-    "updated_utc": "2026-09-12T13:15:22.280388+00:00",
-    "dependency_revisions": {},
-    "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
-  },
+  "description": "Boot configuration, checked format codecs and kernel staging",
   "release_provenance": {
     "schema": "26x86.repository/1",
     "name": "Nextcore-Core",
@@ -30,5 +23,18 @@
     "previous_head": "66eb69888a9cb8bc56d05f9b2a0bbfab5abfd54b",
     "dependency_tags": {},
     "export_method": "immutable git objects applied to existing main; manifest dependency rewrite only"
+  },
+  "publication": {
+    "snapshot": "engineering-preview-20260930",
+    "source_revision": "65909c23d2c62001c293a6c8a2f4ff024004100c",
+    "source_path": "nextcore/crates/nextcore-core",
+    "previous_public_revision": "e7da490ce9237117a2ad6cef0fd7f26e4374c8c4",
+    "method": "Immutable reviewed Git blobs applied to existing public history",
+    "integration": "Tracked integration source; independent Git dependencies pin exact public revisions",
+    "dependencies": {},
+    "macos_boot_verified": false,
+    "metal_verified": false,
+    "physical_installation_verified": false,
+    "device_qualification_verified": false
   }
 }

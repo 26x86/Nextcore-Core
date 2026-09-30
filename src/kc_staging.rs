@@ -69,8 +69,8 @@ struct MemberView {
     is_header: bool,
 }
 
-/// Counts describe the completed full-arena readback. Member view comparisons
-/// may overlap, so `member_file_bytes_compared` is not a unique-byte count.
+/// Counts describe the completed full-arena readback. Member file bytes count
+/// distinct bytes read back in the additional member-view pass.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct StagingVerification {
     pub arena_bytes: usize,
@@ -80,6 +80,15 @@ pub struct StagingVerification {
     pub member_headers_checked: usize,
     pub member_segment_views_checked: usize,
     pub member_file_bytes_compared: usize,
+}
+
+/// Completed collection operations in an observed staging call.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum KcStagingPhase {
+    DestinationInitialized,
+    SegmentsCopied,
+    ArenaVerified,
+    MemberViewsVerified,
 }
 
 /// An inspected plan bound to a live immutable source. Private fields prevent
@@ -255,6 +264,9 @@ impl<'a> KcStagingPlan<'a> {
                 )?);
             }
         }
+        // Validated views share the owning outer mapping's source displacement.
+        // Sorting permits one additional readback per distinct member-backed byte.
+        member_views.sort_unstable_by_key(|view| view.destination_offset);
         Ok(Self {
             source,
             inspection,
@@ -298,22 +310,44 @@ impl<'a> KcStagingPlan<'a> {
     /// and member file view is read back. On a readback error the caller must
     /// discard the contents; no successful result is returned.
     pub fn stage_into(&self, destination: &mut [u8]) -> Result<StagingVerification> {
+        self.stage_into_observed(destination, |_| {})
+    }
+
+    /// Report completed operations without changing the staging or readback contract.
+    pub fn stage_into_observed(
+        &self,
+        destination: &mut [u8],
+        observe: impl FnMut(KcStagingPhase),
+    ) -> Result<StagingVerification> {
         if destination.len() != self.arena_size {
             return Err(E::DestinationSize);
         }
+        let mut observe = observe;
         destination.fill(0);
+        observe(KcStagingPhase::DestinationInitialized);
         for segment in &self.segments {
             destination[segment.destination_offset..segment.destination_offset + segment.file_size]
                 .copy_from_slice(
                     &self.source[segment.file_offset..segment.file_offset + segment.file_size],
                 );
         }
-        self.verify(destination)
+        observe(KcStagingPhase::SegmentsCopied);
+        self.verify_observed(destination, observe)
     }
 
     /// Re-read a staged arena without modifying it. This also permits callers
     /// to detect corruption after a prior successful staging operation.
     pub fn verify(&self, destination: &[u8]) -> Result<StagingVerification> {
+        self.verify_observed(destination, |_| {})
+    }
+
+    /// Re-read an existing arena, reporting each completed verification phase.
+    /// A failed outer readback emits no completion phase.
+    pub fn verify_observed(
+        &self,
+        destination: &[u8],
+        mut observe: impl FnMut(KcStagingPhase),
+    ) -> Result<StagingVerification> {
         if destination.len() != self.arena_size {
             return Err(E::DestinationSize);
         }
@@ -351,27 +385,39 @@ impl<'a> KcStagingPlan<'a> {
             return Err(E::ReadbackMismatch);
         }
         result.hole_bytes += destination.len() - previous_end;
+        observe(KcStagingPhase::ArenaVerified);
+        let mut covered_end = 0;
         for view in &self.member_views {
             // Member memory tails are intentionally not zeroed or compared to
             // zero: only the owning outer mapping determines those contents.
-            if view.destination_offset + view.memory_size > destination.len()
-                || !readback(
-                    &destination[view.destination_offset..view.destination_offset + view.file_size],
-                    Some(&self.source[view.file_offset..view.file_offset + view.file_size]),
-                )
-            {
+            if view.destination_offset + view.memory_size > destination.len() {
                 return Err(E::ReadbackMismatch);
             }
+            let view_file_end = view.destination_offset + view.file_size;
+            let compare_start = covered_end.max(view.destination_offset);
+            if compare_start < view_file_end {
+                let skipped = compare_start - view.destination_offset;
+                if !readback(
+                    &destination[compare_start..view_file_end],
+                    Some(
+                        &self.source[view.file_offset + skipped..view.file_offset + view.file_size],
+                    ),
+                ) {
+                    return Err(E::ReadbackMismatch);
+                }
+                result.member_file_bytes_compared = result
+                    .member_file_bytes_compared
+                    .checked_add(view_file_end - compare_start)
+                    .ok_or(E::AddressOverflow)?;
+            }
+            covered_end = covered_end.max(view_file_end);
             if view.is_header {
                 result.member_headers_checked += 1;
             } else {
                 result.member_segment_views_checked += 1;
             }
-            result.member_file_bytes_compared = result
-                .member_file_bytes_compared
-                .checked_add(view.file_size)
-                .ok_or(E::AddressOverflow)?;
         }
+        observe(KcStagingPhase::MemberViewsVerified);
         Ok(result)
     }
 

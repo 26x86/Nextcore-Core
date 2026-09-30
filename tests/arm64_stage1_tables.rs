@@ -1,5 +1,5 @@
 use nextcore_core::arm64_stage1_tables::{
-    Arm64Stage1Tables, Error, MAX_MEMORY_SIZE, MAX_TABLE_BYTES,
+    Arm64Stage1Tables, Error, Stage1Alias, MAX_MEMORY_SIZE, MAX_TABLE_BYTES,
 };
 
 // Independent descriptor reader: fail on non-table ancestors or non-page leaf,
@@ -104,4 +104,98 @@ fn rejects_alignment_empty_oversize_noncanonical_and_overflow() {
             Error::AddressOverflow
         );
     }
+}
+
+#[test]
+fn linked_aliases_translate_to_owned_ram_and_leave_gaps_unmapped() {
+    let pa = 0x4000_0000;
+    let linear = 0xffff_fe00_0000_0000;
+    let size = 64 * 1024 * 1024;
+    let aliases = [
+        Stage1Alias {
+            virtual_base: 0xffff_fff0_1000_0000,
+            physical_base: pa + 0x20000,
+            bytes: 0x14000,
+        },
+        Stage1Alias {
+            virtual_base: 0xffff_fff0_2000_0000,
+            physical_base: pa + 0x40000,
+            bytes: 0xc000,
+        },
+    ];
+    let tables = Arm64Stage1Tables::new_with_aliases(pa, linear, size, &aliases).unwrap();
+    assert!(tables.bytes().len() <= MAX_TABLE_BYTES);
+    for alias in aliases {
+        for offset in (0..alias.bytes).step_by(16384) {
+            assert_eq!(
+                walk(&tables, alias.virtual_base + offset + 16383),
+                Some(alias.physical_base + offset + 16383)
+            );
+        }
+        assert_eq!(walk(&tables, alias.virtual_base - 1), None);
+        assert_eq!(walk(&tables, alias.virtual_base + alias.bytes), None);
+        assert_eq!(walk(&tables, alias.physical_base), Some(alias.physical_base));
+        assert_eq!(
+            walk(&tables, linear + alias.physical_base - pa),
+            Some(alias.physical_base)
+        );
+    }
+}
+
+#[test]
+fn changed_linked_map_cannot_replace_linear_or_another_alias() {
+    let pa = 0x4000_0000;
+    let linear = 0xffff_fe00_0000_0000;
+    let size = 64 * 1024 * 1024;
+    let first = Stage1Alias {
+        virtual_base: 0xffff_fff0_1000_0000,
+        physical_base: pa + 0x20000,
+        bytes: 0x8000,
+    };
+    let collision = Stage1Alias {
+        virtual_base: first.virtual_base + 0x4000,
+        physical_base: pa + 0x40000,
+        bytes: 0x8000,
+    };
+    assert_eq!(
+        Arm64Stage1Tables::new_with_aliases(pa, linear, size, &[first, collision]).unwrap_err(),
+        Error::OverlappingRange
+    );
+    let changed = Stage1Alias {
+        virtual_base: linear + 0x4000,
+        ..first
+    };
+    assert_eq!(
+        Arm64Stage1Tables::new_with_aliases(pa, linear, size, &[changed]).unwrap_err(),
+        Error::OverlappingRange
+    );
+}
+
+#[test]
+fn rejects_out_of_ram_noncanonical_unaligned_and_excess_aliases() {
+    let pa = 0x4000_0000;
+    let linear = 0xffff_fe00_0000_0000;
+    let size = 64 * 1024 * 1024;
+    let valid = Stage1Alias {
+        virtual_base: 0xffff_fff0_1000_0000,
+        physical_base: pa + 0x20000,
+        bytes: 0x4000,
+    };
+    let cases = [
+        (Stage1Alias { physical_base: pa + size, ..valid }, Error::InvalidRange),
+        (Stage1Alias { virtual_base: 1 << 47, ..valid }, Error::InvalidRange),
+        (Stage1Alias { virtual_base: valid.virtual_base + 1, ..valid }, Error::Alignment),
+        (Stage1Alias { bytes: 0, ..valid }, Error::InvalidRange),
+        (Stage1Alias { virtual_base: u64::MAX - 16383, bytes: 0x8000, ..valid }, Error::AddressOverflow),
+    ];
+    for (alias, expected) in cases {
+        assert_eq!(
+            Arm64Stage1Tables::new_with_aliases(pa, linear, size, &[alias]).unwrap_err(),
+            expected
+        );
+    }
+    assert_eq!(
+        Arm64Stage1Tables::new_with_aliases(pa, linear, size, &[valid, valid, valid]).unwrap_err(),
+        Error::InvalidRange
+    );
 }
