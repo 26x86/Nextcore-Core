@@ -82,5 +82,49 @@
       "retained_active_path": "LICENSE.txt"
     }
   ],
-  "absent_paths": []
+  "absent_paths": [],
+  "history_preservation": {
+    "verified_local_revision": "39dcee1f645d8d5bf2f91a0aeca2bc98d9e4a833",
+    "source_baseline_reachable": true,
+    "all_observed_legacy_refs_and_HEAD_reachable": true,
+    "legacy_refs": [
+      {
+        "ref": "refs/heads/main",
+        "sha": "c08d10b955523dd5da5a04084d6ee1c332760413",
+        "reachable": true
+      },
+      {
+        "ref": "refs/remotes/origin/HEAD",
+        "sha": "c08d10b955523dd5da5a04084d6ee1c332760413",
+        "reachable": true
+      },
+      {
+        "ref": "refs/remotes/origin/main",
+        "sha": "c08d10b955523dd5da5a04084d6ee1c332760413",
+        "reachable": true
+      },
+      {
+        "ref": "refs/tags/26x86-Nextcore-Core-v0.1.0",
+        "sha": "4b8b3801b5bcd2e7ed519cc64feada7d76aa2082",
+        "reachable": true
+      },
+      {
+        "ref": "refs/tags/26x86-Nextcore-Core-v0.1.1",
+        "sha": "66eb69888a9cb8bc56d05f9b2a0bbfab5abfd54b",
+        "reachable": true
+      },
+      {
+        "ref": "refs/tags/26x86-Nextcore-Core-v0.1.2",
+        "sha": "6547be4bbf6b75cf706b89ade4d4a60d5441d223",
+        "reachable": true
+      },
+      {
+        "ref": "HEAD",
+        "sha": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
+        "reachable": true
+      }
+    ],
+    "missing_commit_identities_preserved": 6,
+    "remote_publication_status": "Not performed by this local handoff task"
+  }
 }
