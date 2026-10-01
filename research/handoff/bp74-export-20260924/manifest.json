@@ -1,0 +1,1432 @@
+{
+  "schema": 1,
+  "module": "nextcore-core",
+  "public_repository": "https://github.com/26x86/Nextcore-Core.git",
+  "current_published_prior_handoff_revision": "e57e8c7195c2c623983cd528cdde96e9be0973d4",
+  "export_commit": "35ab5a355feeb6554df931441bc36e33386e75bf",
+  "export_commit_parents": [],
+  "export_tree": "9fc5d6310e364e8533fb540f156f8966c1e283d8",
+  "original_public_parent_source_commit": "93e4a9ebc1a05e2cbec78125a0186ca1b71d98d6",
+  "original_public_source_tree_URL": "https://github.com/26x86/26x86/tree/93e4a9ebc1a05e2cbec78125a0186ca1b71d98d6/nextcore/crates/nextcore-core",
+  "archive_kind": "Historical unfinished public module export variants; original unrelated Git commit identity retained by ordinary merge",
+  "current_active_source_modified": false,
+  "preservation_scope": "Exact older public variants differing from current module source, plus the original source license. Export paths already equal to active public source remain preserved by both Git histories.",
+  "attribute_boundary": "Historical .gitattributes and .gitignore are stored as inert metadata filenames. Original paths remain in the original export commit and in each file record. Archive-only attributes disable text normalization and whitespace diagnostics on preserved variants.",
+  "verification_boundary": "Source byte and Git ancestry verification only. No compiler, test, EFI, guest boot, macOS, Metal or device acceptance was executed by this archival task.",
+  "source_tree_inventory": [
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "5dabb2b27b17fb46a94713256fba0372eaa68784",
+      "bytes": 28,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "ae676916ecbd7b2d619985e4524857bb717a02e8",
+      "bytes": 271,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "ca98cd96efdc228b0c0d0e264bfc0ce9ddadfdd7",
+      "bytes": 20,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "50b0aabd7ba65ea23b2948db4a772a431e3478ea",
+      "bytes": 1508,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "LICENSE.txt",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "f7389913f3fd1cb41276bb098a352b0e27e7e879",
+      "bytes": 1851,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "9867ab154fa9397882aef42a4421cca4145a0d81",
+      "bytes": 314,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/ARM64_STAGE1_TABLES.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "8cda513f78c00f6d60d114007639450247fddb9b",
+      "bytes": 2742,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/DEEP_ARM_TRACE.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "7ae8ef881722ea9f683f2fae874177b54297dec8",
+      "bytes": 1611,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/FRAMEBUFFER_HANDOFF.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "302ea9618deec3dad86896394c54cacc66b40d18",
+      "bytes": 3184,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/GUEST_ALLOCATION_LEDGER.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "be189f84be2d257974d650938ab6a03570a1fd39",
+      "bytes": 13694,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/INITIALIZATION_TRACE.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "e948524783dc88a6468fbe159949bda6cc2ba791",
+      "bytes": 1963,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/LONG_TRACE.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "f306bda56124fa4ece37e0a6966bd8ab09a14956",
+      "bytes": 1955,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/RUNTIME_DEVICE_TREE.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "895c0122749ce2cba9de9df2ab55ecfe9d5b9208",
+      "bytes": 2287,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/TIERED_ARM_TRACE.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "5785b4946b331f1967affff666f713cff10d3dc4",
+      "bytes": 820,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/TRACE_VIDEO.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "3378a1a77a1a6e339bd2958d0b9f18cdd96e12ee",
+      "bytes": 2964,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "docs/UEFI_HASH_BACKEND.md",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "1f3947713bf8a5fbf15bf7860d884759a043cf19",
+      "bytes": 974,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "examples/audit_kc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "2780fdc9eb47c23655baa1b9320f6a21de898e14",
+      "bytes": 3210,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "examples/inspect_firmware_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "b824f7f0770c39d9358b097116c7f92c49b71cf7",
+      "bytes": 1353,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "examples/inspect_kc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "ded6c4b0c7f18e380ee8dd0305d226463009a2aa",
+      "bytes": 1141,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "examples/rebase_kc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "437f8923ffceb97533e550fcf4a54009bde26977",
+      "bytes": 2650,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "examples/stage_kc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "e68644ba1b662f627345b2a1e7e248b7e5ef17e4",
+      "bytes": 3495,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "repository-files.json",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "5d2ce536a7b30ce437728f0d28c9f426590e976e",
+      "bytes": 12725,
+      "blob_already_in_published_prior_history": false
+    },
+    {
+      "path": "repository.json",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "d7c53b2ebed4e36a0399c2af365f59bf1010f5d4",
+      "bytes": 465,
+      "blob_already_in_published_prior_history": false
+    },
+    {
+      "path": "src/acpi.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "d7cc90f1c3cf7044eb9176042fa85f4dc66a48b9",
+      "bytes": 7863,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/apfs_jumpstart.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "13ae445c927f19c3300242797f666cebe7359003",
+      "bytes": 11966,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/arm64_stage1_tables.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "86bf71220d76822e4bd5285bb8068fc7a9da6227",
+      "bytes": 4481,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/boot_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "d38094f914006fb056c5b2fa78d4e30788ad3e88",
+      "bytes": 35777,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/boot_picker.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "767d1bc9cf028c1fdd01e4f74314c8ce5ea564d4",
+      "bytes": 11518,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "9d5d9628d5b85b1a65cbc87d352a808121e2c1e3",
+      "bytes": 11327,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/device_props.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "848a304e113f131e50d51f8a82d9e029a32b3bb2",
+      "bytes": 3658,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/error.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "8b78e5d841605d00657a910c2ea39a43f68cdab1",
+      "bytes": 1030,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/firmware_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "e14b94b34a60fcb2698b3fc197122cb1125da5d8",
+      "bytes": 8728,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/flat_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "4e225c596daf128285afaedf2d588a80179c85fd",
+      "bytes": 10870,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/guest_memory.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "006faef807fb7fbbb6d7f6ec8ef7a4b51e29bed3",
+      "bytes": 17494,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/handoff.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "7ce5190d119256e98db23a5fa3243451fbe3259e",
+      "bytes": 7421,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/kc_classic_rebase.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "db3ffdf42087223aa9618e9ee58cd93cace17408",
+      "bytes": 14586,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/kc_fixup_audit.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "23dde75e123c6ba5ecef89047a676d3746bf63c1",
+      "bytes": 28902,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/kc_staging.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "93b548bd102f896b1918b03544007a8d9b2995fa",
+      "bytes": 19019,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/kernel_collection.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "915ffa91b8f8a0cf22c4eb26fdcedbd6f3012f53",
+      "bytes": 34166,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/kext.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "5688286bb3d2ee1e41813f16b8cfe35a22127518",
+      "bytes": 2421,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/lib.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "a683aee8234975956d8af3590b5448ec58d7d721",
+      "bytes": 855,
+      "blob_already_in_published_prior_history": false
+    },
+    {
+      "path": "src/mach_o.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "622f0c03d92e5ac9ca4d544dc54313f310fc265d",
+      "bytes": 2692,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/macho_image.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "c0563d364133ed3e1168af4288acf460533b4348",
+      "bytes": 17374,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/runtime_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "04809c5b00af8b4c5d054b0ac60fa87f69cfda2e",
+      "bytes": 11385,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/selected_boot_input.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "50acc77fa3043646756230a77b6a626ebe0dada4",
+      "bytes": 8171,
+      "blob_already_in_published_prior_history": false
+    },
+    {
+      "path": "src/xnu_arm64_boot_args.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "39bd78e0d9899ab07b0b070b185b588b087b117a",
+      "bytes": 12193,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/xnu_arm64_handoff.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "a820abf7250b18675d5a5174e7b7b0fa9458d1ce",
+      "bytes": 11626,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "src/xnu_boot_args.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "a9aa4154112696ce64314832cb2d7efe6767ec46",
+      "bytes": 9741,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/acpi_parse.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "35d8978c4b502ae6f9eb6144d416dd6ba6dda25d",
+      "bytes": 4952,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/apfs_boot_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "80876f7cbe61c5f49c0974e02071cd7304f66cea",
+      "bytes": 5292,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/apfs_jumpstart.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "13500977b2f67aba141af6ab0ea3fc684d7247da",
+      "bytes": 16134,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_boot_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "3e769fcf3431633b83a8e194345f62d9935cd182",
+      "bytes": 4320,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_handoff.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "ffadd3e294fbc766201f30806b778ad2d9b657a8",
+      "bytes": 12982,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_initialization_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "15401d869ebb2a03cc457e504e89f99f7903fa65",
+      "bytes": 6860,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_kernel_collection.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "bf569969b148d5cf523865449ca0d850747990f9",
+      "bytes": 11665,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_long_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "f7af20689d7dde3dbb99ad7e9c583fc84bd7ecbb",
+      "bytes": 6265,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_mapped_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "949adda07352061ec364c669fb87f34bcf6edae1",
+      "bytes": 3704,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_platform_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "23555975721b210d37b831e7965dffa62091e6bb",
+      "bytes": 10758,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_stage1_tables.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "cd3d3c3a89bfe73cfd8f0659ca8f003125e7f708",
+      "bytes": 3633,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/arm64_trace_video.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "db7cc3805c935134e1b929dbb2805014debcc2f1",
+      "bytes": 3264,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/boot_config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "8336811ec5976877bf6b9f8fe96907b13e0fe63b",
+      "bytes": 10874,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/boot_menu.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "100da892ef497876a87f941a562a7dc4b4764520",
+      "bytes": 3996,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/config_parse.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "fcb3356a366b1ca9eb28bc26e7e3ebf7921ae1da",
+      "bytes": 1325,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/config_roundtrip.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "c74973bb867c39a23403388f1a9dcd2add31b4ee",
+      "bytes": 739,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/device_props.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "378a3dfdaab125ad67bf6ac65beee80e232b57c8",
+      "bytes": 3056,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/firmware_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "4738ab79ff8c8373161598b6ab9946aa46158a91",
+      "bytes": 7121,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/flat_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "13a37093125c921458646e16850c113bd14a3af2",
+      "bytes": 8636,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/guest_memory.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "e632fcb335a3f1b1ba5d71c931d759195e1eb9de",
+      "bytes": 19163,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/handoff_roundtrip.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "7b624570c136099f150f84eee1631599902a48d3",
+      "bytes": 3280,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/kc_classic_rebase.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "00a37212708bfb8f1834f61ce359f2207767fe73",
+      "bytes": 10341,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/kc_fixup_audit.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "d030279fceb830964f2ba83760faf15ce85022f0",
+      "bytes": 15270,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/kc_staging.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "443e6cd798664449b925e8901053390cd3001fca",
+      "bytes": 11041,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/kernel_collection.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "94cee855375481a0bb1a186625e430fa53cf0f51",
+      "bytes": 18606,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/kernel_target.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "7e35997bf29b5c0367b42f589968dc173934dac1",
+      "bytes": 2152,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/kext_scan.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "3b68980e2f3daca04df03783b42d7c2004cebff5",
+      "bytes": 3031,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/mach_o_load.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "01eb6159bfbf87fa3fdf109bdc751eda78d27c0b",
+      "bytes": 4412,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/macho_image.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "55fc18b2bba300e5a2285c9e54b13bcae7b6a8a6",
+      "bytes": 12748,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/picker_view.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "f2be20f0c3c3b69e3c1df9df0bc45a1ac132df04",
+      "bytes": 2815,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/runtime_dt.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "c0554e58a7fe9f281ee8402aa9f0a4c53710e065",
+      "bytes": 13311,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/sample.plist",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "8ef1f4c08360ee24fc4c7f0028e8548c0a3fce30",
+      "bytes": 1786,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/selected_boot_input.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "7409972c7f79b630366805b9c0ebd40f92eac045",
+      "bytes": 6303,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/xnu_arm64_boot_args.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "0285b9514395e8660edb7488d29a52d77ac7cb28",
+      "bytes": 10995,
+      "blob_already_in_published_prior_history": true
+    },
+    {
+      "path": "tests/xnu_boot_args.rs",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob_sha1": "c05d7c52d954b3602baeb70bbf8fa06257a56a8f",
+      "bytes": 9890,
+      "blob_already_in_published_prior_history": true
+    }
+  ],
+  "original_public_source_comparisons": [
+    {
+      "export_path": ".gitattributes",
+      "original_public_source_path": "nextcore/crates/nextcore-core/.gitattributes",
+      "original_blob": "5dabb2b27b17fb46a94713256fba0372eaa68784",
+      "export_blob": "5dabb2b27b17fb46a94713256fba0372eaa68784",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": ".github/workflows/ci.yml",
+      "original_public_source_path": "nextcore/crates/nextcore-core/.github/workflows/ci.yml",
+      "original_blob": "f44d1cb39f2fbaf1d261175e22e42214a70bbd1d",
+      "export_blob": "ae676916ecbd7b2d619985e4524857bb717a02e8",
+      "exact_original_public_source_blob": false
+    },
+    {
+      "export_path": ".gitignore",
+      "original_public_source_path": "nextcore/crates/nextcore-core/.gitignore",
+      "original_blob": "ca98cd96efdc228b0c0d0e264bfc0ce9ddadfdd7",
+      "export_blob": "ca98cd96efdc228b0c0d0e264bfc0ce9ddadfdd7",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "Cargo.toml",
+      "original_public_source_path": "nextcore/crates/nextcore-core/Cargo.toml",
+      "original_blob": "50b0aabd7ba65ea23b2948db4a772a431e3478ea",
+      "export_blob": "50b0aabd7ba65ea23b2948db4a772a431e3478ea",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "LICENSE.txt",
+      "original_public_source_path": "nextcore/crates/nextcore-core/LICENSE.txt",
+      "original_blob": "f7389913f3fd1cb41276bb098a352b0e27e7e879",
+      "export_blob": "f7389913f3fd1cb41276bb098a352b0e27e7e879",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "README.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/README.md",
+      "original_blob": "95aa37abd1441b49c30f77ca364a8eefb4cff4c5",
+      "export_blob": "9867ab154fa9397882aef42a4421cca4145a0d81",
+      "exact_original_public_source_blob": false
+    },
+    {
+      "export_path": "docs/ARM64_STAGE1_TABLES.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/ARM64_STAGE1_TABLES.md",
+      "original_blob": "8cda513f78c00f6d60d114007639450247fddb9b",
+      "export_blob": "8cda513f78c00f6d60d114007639450247fddb9b",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/DEEP_ARM_TRACE.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/DEEP_ARM_TRACE.md",
+      "original_blob": "7ae8ef881722ea9f683f2fae874177b54297dec8",
+      "export_blob": "7ae8ef881722ea9f683f2fae874177b54297dec8",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/FRAMEBUFFER_HANDOFF.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/FRAMEBUFFER_HANDOFF.md",
+      "original_blob": "302ea9618deec3dad86896394c54cacc66b40d18",
+      "export_blob": "302ea9618deec3dad86896394c54cacc66b40d18",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/GUEST_ALLOCATION_LEDGER.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/GUEST_ALLOCATION_LEDGER.md",
+      "original_blob": "be189f84be2d257974d650938ab6a03570a1fd39",
+      "export_blob": "be189f84be2d257974d650938ab6a03570a1fd39",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/INITIALIZATION_TRACE.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/INITIALIZATION_TRACE.md",
+      "original_blob": "e948524783dc88a6468fbe159949bda6cc2ba791",
+      "export_blob": "e948524783dc88a6468fbe159949bda6cc2ba791",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/LONG_TRACE.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/LONG_TRACE.md",
+      "original_blob": "f306bda56124fa4ece37e0a6966bd8ab09a14956",
+      "export_blob": "f306bda56124fa4ece37e0a6966bd8ab09a14956",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/RUNTIME_DEVICE_TREE.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/RUNTIME_DEVICE_TREE.md",
+      "original_blob": "895c0122749ce2cba9de9df2ab55ecfe9d5b9208",
+      "export_blob": "895c0122749ce2cba9de9df2ab55ecfe9d5b9208",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/TIERED_ARM_TRACE.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/TIERED_ARM_TRACE.md",
+      "original_blob": "5785b4946b331f1967affff666f713cff10d3dc4",
+      "export_blob": "5785b4946b331f1967affff666f713cff10d3dc4",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/TRACE_VIDEO.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/TRACE_VIDEO.md",
+      "original_blob": "3378a1a77a1a6e339bd2958d0b9f18cdd96e12ee",
+      "export_blob": "3378a1a77a1a6e339bd2958d0b9f18cdd96e12ee",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "docs/UEFI_HASH_BACKEND.md",
+      "original_public_source_path": "nextcore/crates/nextcore-core/docs/UEFI_HASH_BACKEND.md",
+      "original_blob": "1f3947713bf8a5fbf15bf7860d884759a043cf19",
+      "export_blob": "1f3947713bf8a5fbf15bf7860d884759a043cf19",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "examples/audit_kc.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/examples/audit_kc.rs",
+      "original_blob": "2780fdc9eb47c23655baa1b9320f6a21de898e14",
+      "export_blob": "2780fdc9eb47c23655baa1b9320f6a21de898e14",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "examples/inspect_firmware_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/examples/inspect_firmware_dt.rs",
+      "original_blob": "b824f7f0770c39d9358b097116c7f92c49b71cf7",
+      "export_blob": "b824f7f0770c39d9358b097116c7f92c49b71cf7",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "examples/inspect_kc.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/examples/inspect_kc.rs",
+      "original_blob": "ded6c4b0c7f18e380ee8dd0305d226463009a2aa",
+      "export_blob": "ded6c4b0c7f18e380ee8dd0305d226463009a2aa",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "examples/rebase_kc.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/examples/rebase_kc.rs",
+      "original_blob": "437f8923ffceb97533e550fcf4a54009bde26977",
+      "export_blob": "437f8923ffceb97533e550fcf4a54009bde26977",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "examples/stage_kc.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/examples/stage_kc.rs",
+      "original_blob": "e68644ba1b662f627345b2a1e7e248b7e5ef17e4",
+      "export_blob": "e68644ba1b662f627345b2a1e7e248b7e5ef17e4",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "repository-files.json",
+      "original_public_source_path": "nextcore/crates/nextcore-core/repository-files.json",
+      "original_blob": "8491b6082461c0cda52a58255c629a6b736b181c",
+      "export_blob": "5d2ce536a7b30ce437728f0d28c9f426590e976e",
+      "exact_original_public_source_blob": false
+    },
+    {
+      "export_path": "repository.json",
+      "original_public_source_path": "nextcore/crates/nextcore-core/repository.json",
+      "original_blob": "a88cdec096570d990cfaae8b26fadc249c3f690f",
+      "export_blob": "d7c53b2ebed4e36a0399c2af365f59bf1010f5d4",
+      "exact_original_public_source_blob": false
+    },
+    {
+      "export_path": "src/acpi.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/acpi.rs",
+      "original_blob": "d7cc90f1c3cf7044eb9176042fa85f4dc66a48b9",
+      "export_blob": "d7cc90f1c3cf7044eb9176042fa85f4dc66a48b9",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/apfs_jumpstart.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/apfs_jumpstart.rs",
+      "original_blob": "13ae445c927f19c3300242797f666cebe7359003",
+      "export_blob": "13ae445c927f19c3300242797f666cebe7359003",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/arm64_stage1_tables.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/arm64_stage1_tables.rs",
+      "original_blob": "86bf71220d76822e4bd5285bb8068fc7a9da6227",
+      "export_blob": "86bf71220d76822e4bd5285bb8068fc7a9da6227",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/boot_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/boot_config.rs",
+      "original_blob": "d38094f914006fb056c5b2fa78d4e30788ad3e88",
+      "export_blob": "d38094f914006fb056c5b2fa78d4e30788ad3e88",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/boot_picker.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/boot_picker.rs",
+      "original_blob": "767d1bc9cf028c1fdd01e4f74314c8ce5ea564d4",
+      "export_blob": "767d1bc9cf028c1fdd01e4f74314c8ce5ea564d4",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/config.rs",
+      "original_blob": "9d5d9628d5b85b1a65cbc87d352a808121e2c1e3",
+      "export_blob": "9d5d9628d5b85b1a65cbc87d352a808121e2c1e3",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/device_props.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/device_props.rs",
+      "original_blob": "848a304e113f131e50d51f8a82d9e029a32b3bb2",
+      "export_blob": "848a304e113f131e50d51f8a82d9e029a32b3bb2",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/error.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/error.rs",
+      "original_blob": "8b78e5d841605d00657a910c2ea39a43f68cdab1",
+      "export_blob": "8b78e5d841605d00657a910c2ea39a43f68cdab1",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/firmware_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/firmware_dt.rs",
+      "original_blob": "e14b94b34a60fcb2698b3fc197122cb1125da5d8",
+      "export_blob": "e14b94b34a60fcb2698b3fc197122cb1125da5d8",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/flat_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/flat_dt.rs",
+      "original_blob": "4e225c596daf128285afaedf2d588a80179c85fd",
+      "export_blob": "4e225c596daf128285afaedf2d588a80179c85fd",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/guest_memory.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/guest_memory.rs",
+      "original_blob": "006faef807fb7fbbb6d7f6ec8ef7a4b51e29bed3",
+      "export_blob": "006faef807fb7fbbb6d7f6ec8ef7a4b51e29bed3",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/handoff.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/handoff.rs",
+      "original_blob": "7ce5190d119256e98db23a5fa3243451fbe3259e",
+      "export_blob": "7ce5190d119256e98db23a5fa3243451fbe3259e",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/kc_classic_rebase.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/kc_classic_rebase.rs",
+      "original_blob": "db3ffdf42087223aa9618e9ee58cd93cace17408",
+      "export_blob": "db3ffdf42087223aa9618e9ee58cd93cace17408",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/kc_fixup_audit.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/kc_fixup_audit.rs",
+      "original_blob": "23dde75e123c6ba5ecef89047a676d3746bf63c1",
+      "export_blob": "23dde75e123c6ba5ecef89047a676d3746bf63c1",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/kc_staging.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/kc_staging.rs",
+      "original_blob": "93b548bd102f896b1918b03544007a8d9b2995fa",
+      "export_blob": "93b548bd102f896b1918b03544007a8d9b2995fa",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/kernel_collection.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/kernel_collection.rs",
+      "original_blob": "915ffa91b8f8a0cf22c4eb26fdcedbd6f3012f53",
+      "export_blob": "915ffa91b8f8a0cf22c4eb26fdcedbd6f3012f53",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/kext.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/kext.rs",
+      "original_blob": "5688286bb3d2ee1e41813f16b8cfe35a22127518",
+      "export_blob": "5688286bb3d2ee1e41813f16b8cfe35a22127518",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/lib.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/lib.rs",
+      "original_blob": "a683aee8234975956d8af3590b5448ec58d7d721",
+      "export_blob": "a683aee8234975956d8af3590b5448ec58d7d721",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/mach_o.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/mach_o.rs",
+      "original_blob": "622f0c03d92e5ac9ca4d544dc54313f310fc265d",
+      "export_blob": "622f0c03d92e5ac9ca4d544dc54313f310fc265d",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/macho_image.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/macho_image.rs",
+      "original_blob": "c0563d364133ed3e1168af4288acf460533b4348",
+      "export_blob": "c0563d364133ed3e1168af4288acf460533b4348",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/runtime_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/runtime_dt.rs",
+      "original_blob": "04809c5b00af8b4c5d054b0ac60fa87f69cfda2e",
+      "export_blob": "04809c5b00af8b4c5d054b0ac60fa87f69cfda2e",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/selected_boot_input.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/selected_boot_input.rs",
+      "original_blob": "50acc77fa3043646756230a77b6a626ebe0dada4",
+      "export_blob": "50acc77fa3043646756230a77b6a626ebe0dada4",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/xnu_arm64_boot_args.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/xnu_arm64_boot_args.rs",
+      "original_blob": "39bd78e0d9899ab07b0b070b185b588b087b117a",
+      "export_blob": "39bd78e0d9899ab07b0b070b185b588b087b117a",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/xnu_arm64_handoff.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/xnu_arm64_handoff.rs",
+      "original_blob": "a820abf7250b18675d5a5174e7b7b0fa9458d1ce",
+      "export_blob": "a820abf7250b18675d5a5174e7b7b0fa9458d1ce",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "src/xnu_boot_args.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/src/xnu_boot_args.rs",
+      "original_blob": "a9aa4154112696ce64314832cb2d7efe6767ec46",
+      "export_blob": "a9aa4154112696ce64314832cb2d7efe6767ec46",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/acpi_parse.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/acpi_parse.rs",
+      "original_blob": "35d8978c4b502ae6f9eb6144d416dd6ba6dda25d",
+      "export_blob": "35d8978c4b502ae6f9eb6144d416dd6ba6dda25d",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/apfs_boot_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/apfs_boot_config.rs",
+      "original_blob": "80876f7cbe61c5f49c0974e02071cd7304f66cea",
+      "export_blob": "80876f7cbe61c5f49c0974e02071cd7304f66cea",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/apfs_jumpstart.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/apfs_jumpstart.rs",
+      "original_blob": "13500977b2f67aba141af6ab0ea3fc684d7247da",
+      "export_blob": "13500977b2f67aba141af6ab0ea3fc684d7247da",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_boot_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_boot_config.rs",
+      "original_blob": "3e769fcf3431633b83a8e194345f62d9935cd182",
+      "export_blob": "3e769fcf3431633b83a8e194345f62d9935cd182",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_handoff.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_handoff.rs",
+      "original_blob": "ffadd3e294fbc766201f30806b778ad2d9b657a8",
+      "export_blob": "ffadd3e294fbc766201f30806b778ad2d9b657a8",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_initialization_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_initialization_config.rs",
+      "original_blob": "15401d869ebb2a03cc457e504e89f99f7903fa65",
+      "export_blob": "15401d869ebb2a03cc457e504e89f99f7903fa65",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_kernel_collection.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_kernel_collection.rs",
+      "original_blob": "bf569969b148d5cf523865449ca0d850747990f9",
+      "export_blob": "bf569969b148d5cf523865449ca0d850747990f9",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_long_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_long_config.rs",
+      "original_blob": "f7af20689d7dde3dbb99ad7e9c583fc84bd7ecbb",
+      "export_blob": "f7af20689d7dde3dbb99ad7e9c583fc84bd7ecbb",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_mapped_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_mapped_config.rs",
+      "original_blob": "949adda07352061ec364c669fb87f34bcf6edae1",
+      "export_blob": "949adda07352061ec364c669fb87f34bcf6edae1",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_platform_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_platform_config.rs",
+      "original_blob": "23555975721b210d37b831e7965dffa62091e6bb",
+      "export_blob": "23555975721b210d37b831e7965dffa62091e6bb",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_stage1_tables.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_stage1_tables.rs",
+      "original_blob": "cd3d3c3a89bfe73cfd8f0659ca8f003125e7f708",
+      "export_blob": "cd3d3c3a89bfe73cfd8f0659ca8f003125e7f708",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/arm64_trace_video.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/arm64_trace_video.rs",
+      "original_blob": "db7cc3805c935134e1b929dbb2805014debcc2f1",
+      "export_blob": "db7cc3805c935134e1b929dbb2805014debcc2f1",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/boot_config.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/boot_config.rs",
+      "original_blob": "8336811ec5976877bf6b9f8fe96907b13e0fe63b",
+      "export_blob": "8336811ec5976877bf6b9f8fe96907b13e0fe63b",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/boot_menu.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/boot_menu.rs",
+      "original_blob": "100da892ef497876a87f941a562a7dc4b4764520",
+      "export_blob": "100da892ef497876a87f941a562a7dc4b4764520",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/config_parse.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/config_parse.rs",
+      "original_blob": "fcb3356a366b1ca9eb28bc26e7e3ebf7921ae1da",
+      "export_blob": "fcb3356a366b1ca9eb28bc26e7e3ebf7921ae1da",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/config_roundtrip.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/config_roundtrip.rs",
+      "original_blob": "c74973bb867c39a23403388f1a9dcd2add31b4ee",
+      "export_blob": "c74973bb867c39a23403388f1a9dcd2add31b4ee",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/device_props.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/device_props.rs",
+      "original_blob": "378a3dfdaab125ad67bf6ac65beee80e232b57c8",
+      "export_blob": "378a3dfdaab125ad67bf6ac65beee80e232b57c8",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/firmware_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/firmware_dt.rs",
+      "original_blob": "4738ab79ff8c8373161598b6ab9946aa46158a91",
+      "export_blob": "4738ab79ff8c8373161598b6ab9946aa46158a91",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/flat_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/flat_dt.rs",
+      "original_blob": "13a37093125c921458646e16850c113bd14a3af2",
+      "export_blob": "13a37093125c921458646e16850c113bd14a3af2",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/guest_memory.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/guest_memory.rs",
+      "original_blob": "e632fcb335a3f1b1ba5d71c931d759195e1eb9de",
+      "export_blob": "e632fcb335a3f1b1ba5d71c931d759195e1eb9de",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/handoff_roundtrip.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/handoff_roundtrip.rs",
+      "original_blob": "7b624570c136099f150f84eee1631599902a48d3",
+      "export_blob": "7b624570c136099f150f84eee1631599902a48d3",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/kc_classic_rebase.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/kc_classic_rebase.rs",
+      "original_blob": "00a37212708bfb8f1834f61ce359f2207767fe73",
+      "export_blob": "00a37212708bfb8f1834f61ce359f2207767fe73",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/kc_fixup_audit.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/kc_fixup_audit.rs",
+      "original_blob": "d030279fceb830964f2ba83760faf15ce85022f0",
+      "export_blob": "d030279fceb830964f2ba83760faf15ce85022f0",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/kc_staging.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/kc_staging.rs",
+      "original_blob": "443e6cd798664449b925e8901053390cd3001fca",
+      "export_blob": "443e6cd798664449b925e8901053390cd3001fca",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/kernel_collection.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/kernel_collection.rs",
+      "original_blob": "94cee855375481a0bb1a186625e430fa53cf0f51",
+      "export_blob": "94cee855375481a0bb1a186625e430fa53cf0f51",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/kernel_target.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/kernel_target.rs",
+      "original_blob": "7e35997bf29b5c0367b42f589968dc173934dac1",
+      "export_blob": "7e35997bf29b5c0367b42f589968dc173934dac1",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/kext_scan.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/kext_scan.rs",
+      "original_blob": "3b68980e2f3daca04df03783b42d7c2004cebff5",
+      "export_blob": "3b68980e2f3daca04df03783b42d7c2004cebff5",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/mach_o_load.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/mach_o_load.rs",
+      "original_blob": "01eb6159bfbf87fa3fdf109bdc751eda78d27c0b",
+      "export_blob": "01eb6159bfbf87fa3fdf109bdc751eda78d27c0b",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/macho_image.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/macho_image.rs",
+      "original_blob": "55fc18b2bba300e5a2285c9e54b13bcae7b6a8a6",
+      "export_blob": "55fc18b2bba300e5a2285c9e54b13bcae7b6a8a6",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/picker_view.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/picker_view.rs",
+      "original_blob": "f2be20f0c3c3b69e3c1df9df0bc45a1ac132df04",
+      "export_blob": "f2be20f0c3c3b69e3c1df9df0bc45a1ac132df04",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/runtime_dt.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/runtime_dt.rs",
+      "original_blob": "c0554e58a7fe9f281ee8402aa9f0a4c53710e065",
+      "export_blob": "c0554e58a7fe9f281ee8402aa9f0a4c53710e065",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/sample.plist",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/sample.plist",
+      "original_blob": "8ef1f4c08360ee24fc4c7f0028e8548c0a3fce30",
+      "export_blob": "8ef1f4c08360ee24fc4c7f0028e8548c0a3fce30",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/selected_boot_input.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/selected_boot_input.rs",
+      "original_blob": "7409972c7f79b630366805b9c0ebd40f92eac045",
+      "export_blob": "7409972c7f79b630366805b9c0ebd40f92eac045",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/xnu_arm64_boot_args.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/xnu_arm64_boot_args.rs",
+      "original_blob": "0285b9514395e8660edb7488d29a52d77ac7cb28",
+      "export_blob": "0285b9514395e8660edb7488d29a52d77ac7cb28",
+      "exact_original_public_source_blob": true
+    },
+    {
+      "export_path": "tests/xnu_boot_args.rs",
+      "original_public_source_path": "nextcore/crates/nextcore-core/tests/xnu_boot_args.rs",
+      "original_blob": "c05d7c52d954b3602baeb70bbf8fa06257a56a8f",
+      "export_blob": "c05d7c52d954b3602baeb70bbf8fa06257a56a8f",
+      "exact_original_public_source_blob": true
+    }
+  ],
+  "files": [
+    {
+      "original_relative_path": ".github/workflows/ci.yml",
+      "archive_relative_path": ".github/workflows/ci.yml",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "ae676916ecbd7b2d619985e4524857bb717a02e8",
+      "sha256": "152bc9bcf865b349f641fb11227d1941e1287e13221640eef281a2c9923bb1ea",
+      "bytes": 271,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "README.md",
+      "archive_relative_path": "README.md",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "9867ab154fa9397882aef42a4421cca4145a0d81",
+      "sha256": "070bd2d9199c08f2a262c2d5605ddb16198cd52721f202b1bce445ae4b8d3f5e",
+      "bytes": 314,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "repository-files.json",
+      "archive_relative_path": "repository-files.json",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "5d2ce536a7b30ce437728f0d28c9f426590e976e",
+      "sha256": "b8725886fc737539da807a01366db36a738f5f99e2cd57af182cd35d538df8b5",
+      "bytes": 12725,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "repository.json",
+      "archive_relative_path": "repository.json",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "d7c53b2ebed4e36a0399c2af365f59bf1010f5d4",
+      "sha256": "7e4b3ce1e32703eaad1f8e78e17a18f3cc5b1dac662c7634d1f1bbb2d4e1d9b7",
+      "bytes": 465,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "src/arm64_stage1_tables.rs",
+      "archive_relative_path": "src/arm64_stage1_tables.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "86bf71220d76822e4bd5285bb8068fc7a9da6227",
+      "sha256": "e311334631e47d53de5c3935ad49f5e936a36efbe28f28620b74d1f9ccb8ce87",
+      "bytes": 4481,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "src/boot_config.rs",
+      "archive_relative_path": "src/boot_config.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "d38094f914006fb056c5b2fa78d4e30788ad3e88",
+      "sha256": "6fbd82c1178bcfd65c1aedcf8a1ee5db573e07a84e8a02b5248a033874ad74d9",
+      "bytes": 35777,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "src/kc_staging.rs",
+      "archive_relative_path": "src/kc_staging.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "93b548bd102f896b1918b03544007a8d9b2995fa",
+      "sha256": "052c9abb2965199e88c46444bf374303d84382a9ded9370c9586fa491aa258bf",
+      "bytes": 19019,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "src/lib.rs",
+      "archive_relative_path": "src/lib.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "a683aee8234975956d8af3590b5448ec58d7d721",
+      "sha256": "f54ecb91d84508eb2146193c63f8323acef71ecc4b6bad180799f029a91b7972",
+      "bytes": 855,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "src/selected_boot_input.rs",
+      "archive_relative_path": "src/selected_boot_input.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "50acc77fa3043646756230a77b6a626ebe0dada4",
+      "sha256": "28636bba5c2e35f07032fc4e5b8d5c7f616a2f6f4c1adb9b356acaa809d94531",
+      "bytes": 8171,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "src/xnu_arm64_handoff.rs",
+      "archive_relative_path": "src/xnu_arm64_handoff.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "a820abf7250b18675d5a5174e7b7b0fa9458d1ce",
+      "sha256": "fe0b0af4c8bd7fe904509a16f87ca12e7ebe5be7d1b18daa2ba218a211634e88",
+      "bytes": 11626,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "tests/arm64_handoff.rs",
+      "archive_relative_path": "tests/arm64_handoff.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "ffadd3e294fbc766201f30806b778ad2d9b657a8",
+      "sha256": "2af6a4be190f06a0d30ea813c98291264f9eb7c2cea63f7870f6de95eaeea49c",
+      "bytes": 12982,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "tests/arm64_mapped_config.rs",
+      "archive_relative_path": "tests/arm64_mapped_config.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "949adda07352061ec364c669fb87f34bcf6edae1",
+      "sha256": "ef9bd709ae56a58b36f4e59d51a2432fc323c6eaec3f9055d17b8fc6dfb7959c",
+      "bytes": 3704,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "tests/arm64_stage1_tables.rs",
+      "archive_relative_path": "tests/arm64_stage1_tables.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "cd3d3c3a89bfe73cfd8f0659ca8f003125e7f708",
+      "sha256": "73695fd6b5a66fe6f1dea079869aa60066a044603bf27e73393c8617c55ea1d6",
+      "bytes": 3633,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "tests/kc_staging.rs",
+      "archive_relative_path": "tests/kc_staging.rs",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "443e6cd798664449b925e8901053390cd3001fca",
+      "sha256": "4e8b7ba648fae78a856df0a8e844a363337bb6b8f9f193c087b568f19f87013c",
+      "bytes": 11041,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "LICENSE.txt",
+      "archive_relative_path": "LICENSE.txt",
+      "source_revision": "35ab5a355feeb6554df931441bc36e33386e75bf",
+      "git_blob_sha1": "f7389913f3fd1cb41276bb098a352b0e27e7e879",
+      "sha256": "77c458ccb6116400cf960f8951630bc3b8b34731b56ffbd736b95c2b78449104",
+      "bytes": 1851,
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    }
+  ]
+}
