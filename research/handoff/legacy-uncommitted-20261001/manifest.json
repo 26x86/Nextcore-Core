@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "module": "nextcore-core",
+  "public_repository": "https://github.com/26x86/Nextcore-Core",
+  "authoritative_main_base": "92fcc9c9b500cd15f89df34a85cd78459801013c",
+  "source_baseline_revision": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
+  "source_baseline_reachable_from_main_base": true,
+  "source_baseline_ancestry_status": "verified",
+  "capture_date_utc": "2026-10-01",
+  "variant_count": 3,
+  "archive_kind": "historical unfinished public UTF-8 variants",
+  "active_api_modified": false,
+  "original_relative_paths_retained": true,
+  "current_module_license_sha256": "77c458ccb6116400cf960f8951630bc3b8b34731b56ffbd736b95c2b78449104",
+  "frozen_license_path": "LICENSE.txt",
+  "frozen_license_sha256": "1c31492338d47ae600de8147203fa991a0a308853ffb3598ac7d48f3a3b819e9",
+  "verification_boundary": "Exact byte/hash preservation only. No compiler, test, EFI, guest, OS boot, Metal or physical-device acceptance result is claimed.",
+  "files": [
+    {
+      "original_relative_path": "LICENSE.txt",
+      "archive_relative_path": "LICENSE.txt",
+      "source_baseline_revision": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
+      "bytes": 1860,
+      "sha256": "1c31492338d47ae600de8147203fa991a0a308853ffb3598ac7d48f3a3b819e9",
+      "git_blob_sha1": "a565bc320ed72af8b179b2b0f418915e2fb5bd4f",
+      "original_filesystem_mode": "0o640",
+      "git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "repository-files.json",
+      "archive_relative_path": "repository-files.json",
+      "source_baseline_revision": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
+      "bytes": 10622,
+      "sha256": "0aa56d53945b799205ce24b0179dc724b300577a52f0a22fdf8a364ad9b9b2c7",
+      "git_blob_sha1": "d60151b4e1a721f75f44e5669de3e45a4ec663e6",
+      "original_filesystem_mode": "0o640",
+      "git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "repository.json",
+      "archive_relative_path": "repository.json",
+      "source_baseline_revision": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
+      "bytes": 1407,
+      "sha256": "1a39c2be561597d4aa57330128663bf458e28f24c24da0907b8757e7ecef54e6",
+      "git_blob_sha1": "a1ebc941dfd480de949630128c3d027e872e6c53",
+      "original_filesystem_mode": "0o640",
+      "git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "module": "nextcore-core",
+  "public_repository": "https://github.com/26x86/Nextcore-Core.git",
+  "authoritative_main_base": "92fcc9c9b500cd15f89df34a85cd78459801013c",
+  "legacy_main_revision": "c08d10b955523dd5da5a04084d6ee1c332760413",
+  "frozen_source_HEAD": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
+  "archive_kind": "Historical source variants from diverged public commit identities",
+  "purpose": "Preserve exact older conflicting source and license variants while the current module APIs and dependency pins remain active.",
+  "verification_boundary": "Git object ancestry and source bytes only; no compiler, runtime, guest boot or device acceptance has been executed for this handoff.",
+  "missing_commit_count": 6,
+  "missing_commits": [
+    {
+      "sha": "6d6247918675d2aec38472da94647d00b860ebd1",
+      "parents": [
+        "6547be4bbf6b75cf706b89ade4d4a60d5441d223",
+        "6105cd7996ef2ea4db35d7d3a1e8822d0703aae9"
+      ],
+      "subject": "Merge pull request #1 from 26x86/codex/arm64e-boot-metal",
+      "commit_stats": ".github/workflows/ci.yml        |   2 +\n README.md                       |  27 +++-\n examples/inspect_firmware_dt.rs |  30 +++++\n repository-files.json           |  61 +++++++--\n repository.json                 |  36 ++++--\n src/boot_config.rs              | 254 ++++++++++++++++++++++++++++++++++++-\n src/firmware_dt.rs              | 270 ++++++++++++++++++++++++++++++++++++++++\n src/lib.rs                      |   2 +\n src/xnu_arm64_handoff.rs        | 230 ++++++++++++++++++++++++++++++++++\n tests/apfs_boot_config.rs       | 150 ++++++++++++++++++++++\n tests/arm64_boot_config.rs      | 105 ++++++++++++++++\n tests/arm64_handoff.rs          | 195 +++++++++++++++++++++++++++++\n tests/arm64_platform_config.rs  | 178 ++++++++++++++++++++++++++\n tests/firmware_dt.rs            | 232 ++++++++++++++++++++++++++++++++++\n 14 files changed, 1744 insertions(+), 28 deletions(-)"
+    },
+    {
+      "sha": "0294453d8fa1c28ccb445a8d9643a4949ac4eabf",
+      "parents": [
+        "6d6247918675d2aec38472da94647d00b860ebd1",
+        "40833dc29d8bcd2976d0a13c2f120533d02500c4"
+      ],
+      "subject": "Merge pull request #2 from 26x86/codex/tiered-trace-budget",
+      "commit_stats": "docs/TIERED_ARM_TRACE.md       | 14 ++++++++++++++\n repository-files.json          | 17 +++++++++++------\n repository.json                |  4 ++--\n src/boot_config.rs             | 16 +++++++++++++++-\n tests/arm64_platform_config.rs | 42 ++++++++++++++++++++++++++++++++++++++++++\n 5 files changed, 84 insertions(+), 9 deletions(-)"
+    },
+    {
+      "sha": "5a7a0382495e588dc19277116c58bcd4b3f6e48b",
+      "parents": [
+        "0294453d8fa1c28ccb445a8d9643a4949ac4eabf",
+        "305e66a2847172a455aaa19264998832a9e5712c"
+      ],
+      "subject": "Merge pull request #3 from 26x86/codex/runtime-device-tree",
+      "commit_stats": "Cargo.toml                  |   1 +\n docs/RUNTIME_DEVICE_TREE.md |  35 ++++\n repository-files.json       |  25 ++-\n repository.json             |   4 +-\n src/lib.rs                  |   1 +\n src/runtime_dt.rs           | 356 ++++++++++++++++++++++++++++++++++++\n tests/runtime_dt.rs         | 430 ++++++++++++++++++++++++++++++++++++++++++++\n 7 files changed, 845 insertions(+), 7 deletions(-)"
+    },
+    {
+      "sha": "0e2bcca1fbccb19b6925e9da5060944de8a6a22f",
+      "parents": [
+        "5a7a0382495e588dc19277116c58bcd4b3f6e48b",
+        "f77c98f0b457ab488f37e5be10a608a364d996c7"
+      ],
+      "subject": "Merge pull request #4 from 26x86/codex/guest-allocation-ledger",
+      "commit_stats": ".github/workflows/ci.yml        |   4 +\n docs/GUEST_ALLOCATION_LEDGER.md | 230 ++++++++++++++++\n repository-files.json           |  31 ++-\n repository.json                 |   4 +-\n src/guest_memory.rs             | 561 ++++++++++++++++++++++++++++++++++++++++\n src/lib.rs                      |   1 +\n tests/guest_memory.rs           | 499 +++++++++++++++++++++++++++++++++++\n tests/kc_staging.rs             |  37 +++\n 8 files changed, 1357 insertions(+), 10 deletions(-)"
+    },
+    {
+      "sha": "1c5f8a125b781a609a693fd1465c76016bbd9299",
+      "parents": [
+        "0e2bcca1fbccb19b6925e9da5060944de8a6a22f",
+        "147f4c4e4969074c9dd12c63bf17c6e8c674dabb"
+      ],
+      "subject": "Merge pull request #5 from 26x86/codex/uefi-software-sha2",
+      "commit_stats": ".github/workflows/ci.yml  |  4 ++++\n Cargo.toml                |  3 +++\n docs/UEFI_HASH_BACKEND.md | 16 ++++++++++++++++\n repository-files.json     | 17 +++++++++++------\n repository.json           |  4 ++--\n 5 files changed, 36 insertions(+), 8 deletions(-)"
+    },
+    {
+      "sha": "c08d10b955523dd5da5a04084d6ee1c332760413",
+      "parents": [
+        "1c5f8a125b781a609a693fd1465c76016bbd9299",
+        "bab7ac453a0f8ceab558eca1ad069bcfaf139776"
+      ],
+      "subject": "Merge pull request #6 from 26x86/codex/deep-arm-trace",
+      "commit_stats": "docs/DEEP_ARM_TRACE.md         |  9 ++++++++\n repository-files.json          | 17 +++++++++------\n repository.json                |  4 ++--\n src/boot_config.rs             | 34 ++++++++++++++++++++++++++++-\n tests/arm64_platform_config.rs | 49 ++++++++++++++++++++++++++++++++++++++++++\n 5 files changed, 104 insertions(+), 9 deletions(-)"
+    }
+  ],
+  "conflict_paths": [],
+  "files": [
+    {
+      "original_path": "LICENSE.txt",
+      "archive_path": "c08d10b95552/LICENSE.txt",
+      "source_revisions": [
+        "c08d10b955523dd5da5a04084d6ee1c332760413",
+        "147f4c4e4969074c9dd12c63bf17c6e8c674dabb"
+      ],
+      "bytes": 1851,
+      "sha256": "77c458ccb6116400cf960f8951630bc3b8b34731b56ffbd736b95c2b78449104",
+      "git_blob_sha1": "f7389913f3fd1cb41276bb098a352b0e27e7e879",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "LICENSE.txt"
+    }
+  ],
+  "absent_paths": []
+}
